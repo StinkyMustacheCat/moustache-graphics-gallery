@@ -20,10 +20,18 @@ function createPreview(entry, card) {
   }
   const video = document.createElement('video');
   video.controls = true;
+  video.autoplay = true;
   video.muted = true;
   video.loop = true;
+  video.playsInline = true;
   video.preload = 'metadata';
-  video.src = entry.preview;
+  const source = document.createElement('source');
+  source.src = new URL(entry.preview, window.location.href).href;
+  source.type = 'video/mp4';
+  video.append(source);
+  video.addEventListener('error', () => {
+    preview.innerHTML = '<span class="no-preview">Este navegador no puede reproducir el MP4. Usa Descargar o abre el vídeo directamente.</span>';
+  }, { once: true });
   preview.append(video);
 }
 
