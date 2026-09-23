@@ -1,0 +1,155 @@
+{
+  "version": 2,
+  "name": "Kinetic Title Dark Souls Zoom & Fade",
+  "parameters": [
+    {
+      "id": "text_content",
+      "label": "Texto Personalizado",
+      "type": "text",
+      "randomize": false,
+      "default": "Has Muerto"
+    },
+    {
+      "id": "text_align",
+      "label": "Alineación del Texto",
+      "type": "select",
+      "randomize": false,
+      "options": [
+        "center",
+        "left",
+        "right"
+      ],
+      "default": "center"
+    },
+    {
+      "id": "text_color",
+      "label": "Color Principal del Texto",
+      "type": "color",
+      "randomize": false,
+      "default": "#ff0000"
+    },
+    {
+      "id": "glow_color",
+      "label": "Color del Resplandor Principal",
+      "type": "color",
+      "randomize": false,
+      "default": "#ff7575"
+    },
+    {
+      "id": "bg_color",
+      "label": "Color de Fondo (Chroma Key / Oscuro)",
+      "type": "color",
+      "randomize": false,
+      "default": "#08030C"
+    },
+    {
+      "id": "font_family",
+      "label": "Fuente Tipográfica",
+      "type": "select",
+      "randomize": false,
+      "options": [
+        "Georgia",
+        "Times New Roman",
+        "Cinzel",
+        "Impact",
+        "Arial",
+        "Courier New"
+      ],
+      "default": "Georgia"
+    },
+    {
+      "id": "font_weight",
+      "label": "Peso / Estilo de Fuente",
+      "type": "select",
+      "randomize": false,
+      "options": [
+        "normal",
+        "bold",
+        "lighter",
+        "italic",
+        "bold italic"
+      ],
+      "default": "bold"
+    },
+    {
+      "id": "font_size_mult",
+      "label": "Multiplicador de Tamaño de Fuente",
+      "type": "number",
+      "randomize": false,
+      "min": 0.5,
+      "max": 2.5,
+      "step": 0.1,
+      "default": 2.3
+    },
+    {
+      "id": "glow_intensity",
+      "label": "Intensidad del Resplandor (Blur)",
+      "type": "number",
+      "randomize": false,
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "default": 20
+    },
+    {
+      "id": "zoom_intensity",
+      "label": "Intensidad del Zoom (Escala)",
+      "type": "number",
+      "randomize": false,
+      "min": 0,
+      "max": 1,
+      "step": 0.05,
+      "default": 0.45
+    },
+    {
+      "id": "reveal_stagger",
+      "label": "Escalonado de Revelación por Letras",
+      "type": "number",
+      "randomize": false,
+      "min": 0.1,
+      "max": 1,
+      "step": 0.05,
+      "default": 0.6
+    },
+    {
+      "id": "particle_density",
+      "label": "Cantidad de Cenizas / Partículas",
+      "type": "number",
+      "randomize": false,
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "default": 80
+    },
+    {
+      "id": "particle_color_2",
+      "label": "Color Secundario de Cenizas",
+      "type": "color",
+      "randomize": false,
+      "default": "#FF4500"
+    },
+    {
+      "id": "particle_speed",
+      "label": "Velocidad de Ascenso de Cenizas",
+      "type": "number",
+      "randomize": false,
+      "min": 0.2,
+      "max": 3,
+      "step": 0.1,
+      "default": 1
+    }
+  ],
+  "html": "<canvas id=\"ds-canvas\"></canvas>",
+  "css": "#ds-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }",
+  "render": "const { root, params, progress, time, width, height } = ctx;\nconst canvas = root.querySelector('#ds-canvas');\nif (!canvas) return;\n\nif (canvas.width !== width || canvas.height !== height) {\n  canvas.width = width;\n  canvas.height = height;\n}\n\nconst c = canvas.getContext('2d');\n\n// 1. OBTENCIÓN Y VALIDACIÓN DE PARÁMETROS\nconst text = (params.text_content !== undefined && params.text_content !== '') ? params.text_content : \"DARK SOULS ES UN VIDEOJUEGO\";\nconst textAlign = params.text_align || \"center\";\nconst mainColor = params.text_color || \"#B366FF\";\nconst glowColor = params.glow_color || \"#8A2BE2\";\nconst bgColor = params.bg_color || \"#08030C\";\nconst fontFamily = params.font_family || \"Georgia\";\nconst fontWeight = params.font_weight || \"bold\";\nconst fontSizeMult = params.font_size_mult !== undefined ? params.font_size_mult : 1.0;\nconst glowIntensity = params.glow_intensity !== undefined ? params.glow_intensity : 20;\nconst zoomIntensity = params.zoom_intensity !== undefined ? params.zoom_intensity : 0.45;\nconst revealStagger = params.reveal_stagger !== undefined ? params.reveal_stagger : 0.6;\nconst numParticles = params.particle_density !== undefined ? params.particle_density : 80;\nconst particleColor2 = params.particle_color_2 || \"#FF4500\";\nconst particleSpeed = params.particle_speed !== undefined ? params.particle_speed : 1.0;\n\n// Limpiar fondo\nc.fillStyle = bgColor;\nc.fillRect(0, 0, width, height);\n\n// 2. CÁLCULO DE OPACIDAD GLOBAL (Fade In / Fade Out)\nlet globalAlpha = 1;\nif (progress < 0.15) {\n  globalAlpha = progress / 0.15;\n} else if (progress > 0.85) {\n  globalAlpha = (1 - progress) / 0.15;\n}\nglobalAlpha = Math.max(0, Math.min(1, globalAlpha));\n\nif (globalAlpha <= 0) return;\n\n// 3. RENDERIZADO DE PARTÍCULAS DE CENIZA / MAGIA\nif (numParticles > 0) {\n  c.save();\n  for (let i = 0; i < numParticles; i++) {\n    const seed = i * 137.3;\n    const speedY = (30 + (seed % 40)) * particleSpeed;\n    const driftX = Math.sin(time * 0.8 + seed) * 25;\n    \n    let py = (height + 50 - ((time * speedY + seed * 10) % (height + 100)));\n    let px = ((seed * 19.3 + driftX) % width);\n    if (px < 0) px += width;\n\n    const size = 1.2 + (seed % 3.0);\n    const alpha = (0.3 + Math.sin(time * 2 + seed) * 0.3) * globalAlpha;\n    const color = (i % 3 === 0) ? particleColor2 : glowColor;\n\n    c.fillStyle = color;\n    c.shadowColor = mainColor;\n    c.shadowBlur = glowIntensity > 0 ? 8 : 0;\n    c.globalAlpha = Math.max(0, Math.min(1, alpha));\n\n    c.beginPath();\n    // Cenizas ligeramente ovaladas o asimétricas\n    const rx = size;\n    const ry = size * (0.8 + (seed % 0.6));\n    c.ellipse(px, py, rx, ry, seed, 0, Math.PI * 2);\n    c.fill();\n  }\n  c.restore();\n}\n\n// 4. CONFIGURACIÓN DEL TEXTO Y MÉT TRICAS\nconst baseFontSize = Math.min(width * 0.055, 65) * fontSizeMult;\nc.font = `${fontWeight} ${baseFontSize}px \"${fontFamily}\", serif`;\nc.textBaseline = \"middle\";\n\nconst chars = text.split(\"\");\nlet unscaledTotalWidth = 0;\nconst charWidths = chars.map(char => {\n  const w = c.measureText(char).width;\n  unscaledTotalWidth += w;\n  return w;\n});\n\n// Determinación del origen según la alineación elegida\nlet cx = width / 2;\nif (textAlign === \"left\") {\n  cx = width * 0.1 + (unscaledTotalWidth / 2);\n} else if (textAlign === \"right\") {\n  cx = width * 0.9 - (unscaledTotalWidth / 2);\n}\nconst cy = height / 2;\n\n// Escalado progresivo de zoom\nconst growthScale = (1 - (zoomIntensity * 0.5)) + (progress * zoomIntensity);\nconst revealDuration = 0.5;\n\n// 5. DIBUJO DE CARACTERES CINETICOS\nc.save();\nc.translate(cx, cy);\nc.scale(growthScale, growthScale);\n\nlet startX = -unscaledTotalWidth / 2;\n\nchars.forEach((char, i) => {\n  const charW = charWidths[i];\n  const charCX = startX + charW / 2;\n  \n  const charDelay = (i / Math.max(1, chars.length)) * (revealDuration * revealStagger);\n  const charProgress = Math.max(0, Math.min(1, (progress - charDelay) / 0.2));\n\n  if (charProgress > 0) {\n    c.save();\n\n    const charScale = 0.6 + charProgress * 0.4;\n    const alpha = charProgress * globalAlpha;\n\n    c.translate(charCX, 0);\n    c.scale(charScale, charScale);\n\n    if (glowIntensity > 0) {\n      c.shadowColor = glowColor;\n      c.shadowBlur = glowIntensity + Math.sin(time * 3 + i) * (glowIntensity * 0.3);\n    }\n    c.globalAlpha = Math.max(0, Math.min(1, alpha));\n\n    c.fillStyle = mainColor;\n    c.textAlign = \"center\";\n    c.fillText(char, 0, 0);\n\n    // Destello de aparición en blanco\n    if (charProgress > 0.1 && charProgress < 0.4) {\n      c.fillStyle = \"#FFFFFF\";\n      c.globalAlpha = Math.max(0, Math.min(1, ((0.4 - charProgress) / 0.3) * globalAlpha));\n      c.fillText(char, 0, 0);\n    }\n\n    c.restore();\n  }\n\n  startX += charW;\n});\n\nc.restore();",
+  "seed": 1,
+  "stops": [],
+  "recommended": {
+    "duration": 3,
+    "aspect": "horizontal",
+    "resolution": 1080
+  },
+  "editorSettings": {
+    "background": "#172326"
+  }
+}

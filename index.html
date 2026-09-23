@@ -20,12 +20,23 @@
     <header class="hero">
       <div class="hero-copy">
         <p class="eyebrow">GALERÍA ABIERTA · MGT 0.31</p>
-        <h1>Motion graphics<br><em>que se mueven.</em></h1>
+        <h1>Composiciones editables<br><em>tipo Motion Graphics para MGT.</em></h1>
         <p>Descubre composiciones creadas con MGT. Reproduce una muestra, copia su código o descarga el JSON para abrirlo en tu propia galería.</p>
       </div>
       <div class="hero-mark" aria-hidden="true"><span>✦</span><span>✦</span><span>✦</span></div>
     </header>
     <div class="section-heading"><span>01</span><h2>Composiciones</h2><i></i><small>JSON · MP4 · OPEN</small></div>
+    <section class="gallery-tools" aria-label="Opciones de visualización">
+      <div class="view-switcher" role="group" aria-label="Tipo de vista">
+        <button class="view-button active" type="button" data-view="grid" aria-pressed="true">Grilla</button>
+        <button class="view-button" type="button" data-view="list" aria-pressed="false">Lista</button>
+      </div>
+      <label class="size-control" for="card-size">
+        <span>Tamaño</span>
+        <input id="card-size" type="range" min="280" max="520" step="20" value="340">
+        <output id="card-size-value" for="card-size">340 px</output>
+      </label>
+    </section>
     <section id="gallery" class="gallery" aria-live="polite"></section>
     <p id="status" class="status" role="status"></p>
   </main>

@@ -1,10 +1,33 @@
 const gallery = document.querySelector('#gallery');
 const status = document.querySelector('#status');
 const template = document.querySelector('#card-template');
+const viewButtons = document.querySelectorAll('.view-button');
+const sizeInput = document.querySelector('#card-size');
+const sizeOutput = document.querySelector('#card-size-value');
 
 function setStatus(message) {
   status.textContent = message;
 }
+
+function setView(view) {
+  gallery.classList.toggle('list-view', view === 'list');
+  viewButtons.forEach((button) => {
+    const active = button.dataset.view === view;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-pressed', String(active));
+  });
+}
+
+viewButtons.forEach((button) => {
+  button.addEventListener('click', () => setView(button.dataset.view));
+});
+
+sizeInput.addEventListener('input', () => {
+  const size = Number(sizeInput.value);
+  gallery.style.setProperty('--card-min', `${size}px`);
+  sizeOutput.value = `${size} px`;
+  sizeOutput.textContent = `${size} px`;
+});
 
 async function loadComposition(entry) {
   const response = await fetch(`gallery/${entry.file}`);

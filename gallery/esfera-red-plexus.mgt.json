@@ -1,0 +1,151 @@
+{
+  "version": 2,
+  "name": "Esfera Red Plexus 3D con Texto Central",
+  "parameters": [
+    {
+      "id": "center_text",
+      "label": "Texto Central",
+      "type": "text",
+      "randomize": false,
+      "default": "NEXUS"
+    },
+    {
+      "id": "text_size",
+      "label": "Tamaño del Texto",
+      "type": "number",
+      "randomize": false,
+      "min": 12,
+      "max": 80,
+      "step": 2,
+      "default": 80
+    },
+    {
+      "id": "text_color",
+      "label": "Color del Texto",
+      "type": "color",
+      "randomize": false,
+      "default": "#4133ff"
+    },
+    {
+      "id": "point_density",
+      "label": "Densidad de Puntos (Nodos)",
+      "type": "number",
+      "randomize": false,
+      "min": 30,
+      "max": 180,
+      "step": 10,
+      "default": 140
+    },
+    {
+      "id": "point_size",
+      "label": "Tamaño de los Puntos",
+      "type": "number",
+      "randomize": false,
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "id": "line_width",
+      "label": "Grosor de las Líneas",
+      "type": "number",
+      "randomize": false,
+      "min": 1,
+      "max": 8,
+      "step": 0.5,
+      "default": 8
+    },
+    {
+      "id": "rot_direction",
+      "label": "Dirección de Rotación",
+      "type": "select",
+      "randomize": false,
+      "options": [
+        "Horizontal (Izquierda -> Derecha)",
+        "Horizontal (Derecha -> Izquierda)",
+        "Vertical (Arriba -> Abajo)",
+        "Diagonal 3D"
+      ],
+      "default": "Horizontal (Izquierda -> Derecha)"
+    },
+    {
+      "id": "rot_speed",
+      "label": "Velocidad de Rotación",
+      "type": "number",
+      "randomize": false,
+      "min": 2,
+      "max": 30,
+      "step": 2,
+      "default": 8
+    },
+    {
+      "id": "primary_color",
+      "label": "Color de Nodos y Red",
+      "type": "color",
+      "randomize": false,
+      "default": "#FF3366"
+    },
+    {
+      "id": "bg_color",
+      "label": "Color de Fondo",
+      "type": "color",
+      "randomize": false,
+      "default": "#FFFFFF"
+    },
+    {
+      "id": "glow_intensity",
+      "label": "Brillo de Nodos y Texto (Glow)",
+      "type": "number",
+      "randomize": false,
+      "min": 0,
+      "max": 40,
+      "step": 5,
+      "default": 15
+    },
+    {
+      "id": "conn_distance",
+      "label": "Distancia Máxima de Conexión",
+      "type": "number",
+      "randomize": false,
+      "min": 40,
+      "max": 160,
+      "step": 10,
+      "default": 150
+    },
+    {
+      "id": "sphere_radius",
+      "label": "Radio de la Esfera (%)",
+      "type": "number",
+      "randomize": false,
+      "min": 20,
+      "max": 45,
+      "step": 5,
+      "default": 35
+    },
+    {
+      "id": "show_depth",
+      "label": "Atenuación por Profundidad 3D",
+      "type": "select",
+      "randomize": false,
+      "options": [
+        "Sí",
+        "No"
+      ],
+      "default": "No"
+    }
+  ],
+  "html": "<canvas id=\"sphere-canvas\"></canvas>",
+  "css": "#sphere-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }",
+  "render": "const { root, params, progress, time, width, height } = ctx;\nconst canvas = root.querySelector('#sphere-canvas');\nif (!canvas) return;\n\nif (canvas.width !== width || canvas.height !== height) {\n  canvas.width = width;\n  canvas.height = height;\n}\n\nconst c = canvas.getContext('2d');\nconst centerText = params.center_text || \"\";\nconst textSize = params.text_size || 32;\nconst textColor = params.text_color || \"#FF3366\";\nconst numPoints = params.point_density || 80;\nconst basePointSize = params.point_size || 4;\nconst baseLineWidth = params.line_width || 2.5;\nconst rotDir = params.rot_direction || \"Horizontal (Izquierda -> Derecha)\";\nconst rotSpeed = (params.rot_speed || 10) * 0.1;\nconst primaryColor = params.primary_color || \"#FF3366\";\nconst bgColor = params.bg_color || \"#FFFFFF\";\nconst glowBlur = params.glow_intensity || 15;\nconst maxDist = params.conn_distance || 90;\nconst radiusPct = (params.sphere_radius || 35) / 100;\nconst useDepth = (params.show_depth || \"Sí\") === \"Sí\";\n\n// Limpiar fondo\nc.fillStyle = bgColor;\nc.fillRect(0, 0, width, height);\n\nconst cx = width / 2;\nconst cy = height / 2;\nconst radius = Math.min(width, height) * radiusPct;\n\n// 1. DIBUJAR TEXTO EN EL CENTRO\nif (centerText.trim() !== \"\") {\n  c.save();\n  c.font = `bold ${textSize}px system-ui, -apple-system, sans-serif`;\n  c.textAlign = \"center\";\n  c.textBaseline = \"middle\";\n  c.fillStyle = textColor;\n  c.shadowColor = textColor;\n  c.shadowBlur = glowBlur;\n  c.fillText(centerText, cx, cy);\n  c.restore();\n}\n\n// Generación determinista de puntos en superficie de la esfera (Fibonacci Sphere)\nconst points = [];\nconst phi = (1 + Math.sqrt(5)) / 2;\n\nfor (let i = 0; i < numPoints; i++) {\n  const y = 1 - (i / (numPoints - 1)) * 2;\n  const radiusAtY = Math.sqrt(1 - y * y);\n  const theta = 2 * Math.PI * i / phi;\n\n  const x = Math.cos(theta) * radiusAtY;\n  const z = Math.sin(theta) * radiusAtY;\n\n  const isHighlight = (i % 7 === 0);\n\n  points.push({ x: x * radius, y: y * radius, z: z * radius, isHighlight });\n}\n\nlet angleX = 0;\nlet angleY = 0;\nlet angleZ = 0;\n\nconst t = time * rotSpeed;\n\nif (rotDir === \"Horizontal (Izquierda -> Derecha)\") {\n  angleY = t;\n} else if (rotDir === \"Horizontal (Derecha -> Izquierda)\") {\n  angleY = -t;\n} else if (rotDir === \"Vertical (Arriba -> Abajo)\") {\n  angleX = t;\n} else {\n  angleX = t * 0.7;\n  angleY = t * 0.7;\n  angleZ = t * 0.3;\n}\n\nconst cosX = Math.cos(angleX), sinX = Math.sin(angleX);\nconst cosY = Math.cos(angleY), sinY = Math.sin(angleY);\nconst cosZ = Math.cos(angleZ), sinZ = Math.sin(angleZ);\n\nconst projected = points.map(p => {\n  let y1 = p.y * cosX - p.z * sinX;\n  let z1 = p.y * sinX + p.z * cosX;\n  let x1 = p.x;\n\n  let x2 = x1 * cosY + z1 * sinY;\n  let z2 = -x1 * sinY + z1 * cosY;\n  let y2 = y1;\n\n  let x3 = x2 * cosZ - y2 * sinZ;\n  let y3 = x2 * sinZ + y2 * cosZ;\n  let z3 = z2;\n\n  const perspective = 600;\n  const scale = perspective / (perspective + z3);\n  const projX = cx + x3 * scale;\n  const projY = cy + y3 * scale;\n\n  const depthFactor = Math.max(0.1, Math.min(1, (z3 + radius) / (2 * radius)));\n\n  return {\n    x: projX,\n    y: projY,\n    z: z3,\n    scale,\n    depth: depthFactor,\n    isHighlight: p.isHighlight\n  };\n});\n\nprojected.sort((a, b) => a.z - b.z);\n\nfunction hexToRgb(hex) {\n  let c = hex.replace('#', '');\n  if (c.length === 3) c = c.split('').map(x => x + x).join('');\n  const num = parseInt(c, 16);\n  return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };\n}\n\nconst rgb = hexToRgb(primaryColor);\n\n// 2. DIBUJAR LÍNEAS DE CONEXIÓN\nfor (let i = 0; i < projected.length; i++) {\n  const p1 = projected[i];\n  for (let j = i + 1; j < projected.length; j++) {\n    const p2 = projected[j];\n    const dx = p1.x - p2.x;\n    const dy = p1.y - p2.y;\n    const dist = Math.sqrt(dx * dx + dy * dy);\n\n    if (dist < maxDist) {\n      const alphaDist = 1 - (dist / maxDist);\n      const avgDepth = useDepth ? (p1.depth + p2.depth) / 2 : 1;\n      const finalAlpha = Math.max(0, Math.min(1, alphaDist * avgDepth * 0.7));\n\n      c.strokeStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${finalAlpha})`;\n      c.lineWidth = (useDepth ? avgDepth : 1) * baseLineWidth;\n      c.beginPath();\n      c.moveTo(p1.x, p1.y);\n      c.lineTo(p2.x, p2.y);\n      c.stroke();\n    }\n  }\n}\n\n// 3. DIBUJAR NODOS / PUNTOS\nprojected.forEach(p => {\n  const pSize = useDepth ? basePointSize * (0.5 + p.depth * 0.8) : basePointSize;\n  const pAlpha = useDepth ? Math.max(0.2, p.depth) : 1;\n\n  c.save();\n  c.fillStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${pAlpha})`;\n  c.shadowColor = primaryColor;\n  c.shadowBlur = glowBlur * (useDepth ? p.depth : 1);\n\n  if (p.isHighlight) {\n    c.beginPath();\n    c.arc(p.x, p.y, pSize * 2.2, 0, Math.PI * 2);\n    c.fillStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${pAlpha * 0.25})`;\n    c.fill();\n  }\n\n  c.beginPath();\n  c.arc(p.x, p.y, pSize, 0, Math.PI * 2);\n  c.fillStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${pAlpha})`;\n  c.fill();\n\n  c.restore();\n});",
+  "seed": 1,
+  "stops": [],
+  "recommended": {
+    "duration": 6,
+    "aspect": "horizontal",
+    "resolution": 1080
+  },
+  "editorSettings": {
+    "background": "#F2F5F8"
+  }
+}

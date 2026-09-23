@@ -6,5 +6,29 @@
     "file": "desencriptador-hacker-matrix.mgt.json",
     "preview": "media/matrix-v1.mp4",
     "license": "CC0-1.0"
+  },
+  {
+    "id": "kinetic-title-dark-souls",
+    "title": "Kinetic Title Dark Souls",
+    "description": "Título cinético con zoom y fundido, inspirado en una presentación oscura y dramática.",
+    "file": "kinetic-title-dark-souls.mgt.json",
+    "preview": "media/dark-souls-text.mp4",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "dron-sobre-montanas",
+    "title": "Dron sobre montañas",
+    "description": "Composición atmosférica de paisaje con movimiento y sensación de vuelo sobre montañas.",
+    "file": "dron-sobre-montanas.mgt.json",
+    "preview": "media/dron-sobre-montanas.mp4",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "esfera-red-plexus",
+    "title": "Esfera Red Plexus 3D con Texto Central",
+    "description": "Esfera de red luminosa con estética tecnológica y texto central.",
+    "file": "esfera-red-plexus.mgt.json",
+    "preview": "media/esfera-plexus-con-texto.mp4",
+    "license": "CC0-1.0"
   }
 ]

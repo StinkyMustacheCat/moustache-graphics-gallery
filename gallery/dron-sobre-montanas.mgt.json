@@ -1,0 +1,161 @@
+{
+  "version": 2,
+  "name": "Dron sobre montañas",
+  "parameters": [
+    {
+      "id": "bg_type",
+      "label": "Tipo de Fondo",
+      "type": "select",
+      "randomize": false,
+      "options": [
+        "gradient",
+        "solid"
+      ],
+      "default": "gradient"
+    },
+    {
+      "id": "bg_solid_color",
+      "label": "Color de Fondo Sólido (Chroma Key)",
+      "type": "color",
+      "randomize": false,
+      "default": "#00FF00"
+    },
+    {
+      "id": "sky_top_color",
+      "label": "Cielo - Color Superior",
+      "type": "color",
+      "randomize": false,
+      "default": "#9fe0ec"
+    },
+    {
+      "id": "sky_bottom_color",
+      "label": "Cielo - Color Inferior",
+      "type": "color",
+      "randomize": false,
+      "default": "#f9e7b7"
+    },
+    {
+      "id": "show_clouds",
+      "label": "Mostrar Nubes",
+      "type": "boolean",
+      "randomize": false,
+      "default": true
+    },
+    {
+      "id": "mountain_color_1",
+      "label": "Color Montaña Lejana",
+      "type": "color",
+      "randomize": false,
+      "default": "#b5c89b"
+    },
+    {
+      "id": "mountain_color_2",
+      "label": "Color Montaña Media",
+      "type": "color",
+      "randomize": false,
+      "default": "#79a967"
+    },
+    {
+      "id": "mountain_color_3",
+      "label": "Color Montaña Cercana",
+      "type": "color",
+      "randomize": false,
+      "default": "#528b61"
+    },
+    {
+      "id": "show_shadow",
+      "label": "Mostrar Sombra en el Suelo",
+      "type": "boolean",
+      "randomize": false,
+      "default": true
+    },
+    {
+      "id": "drone_shell_top",
+      "label": "Color Carcasa (Superior)",
+      "type": "color",
+      "randomize": false,
+      "default": "#fff2ba"
+    },
+    {
+      "id": "drone_shell_bottom",
+      "label": "Color Carcasa (Inferior)",
+      "type": "color",
+      "randomize": false,
+      "default": "#f3bb56"
+    },
+    {
+      "id": "drone_accent_color",
+      "label": "Color de Detalles / Anillos",
+      "type": "color",
+      "randomize": false,
+      "default": "#e3a549"
+    },
+    {
+      "id": "eye_color",
+      "label": "Color del Lente / Ojo",
+      "type": "color",
+      "randomize": false,
+      "default": "#31a8bd"
+    },
+    {
+      "id": "drone_scale",
+      "label": "Escala del Dron",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": 0.5,
+      "max": 1.5,
+      "step": 0.05,
+      "default": 1
+    },
+    {
+      "id": "motion",
+      "label": "Amplitud de Movimiento",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": 0,
+      "max": 2,
+      "step": 0.1,
+      "default": 1
+    },
+    {
+      "id": "hover_speed",
+      "label": "Velocidad de Flotación",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": 0.2,
+      "max": 3,
+      "step": 0.1,
+      "default": 1
+    },
+    {
+      "id": "rotor_speed",
+      "label": "Velocidad de Hélices",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": 0.2,
+      "max": 3,
+      "step": 0.1,
+      "default": 1
+    }
+  ],
+  "html": "<div id=\"stage\"><svg viewBox=\"0 0 1080 1080\" xmlns=\"http://www.w3.org/2000/svg\"><defs><linearGradient id=\"sky\" x2=\"0\" y2=\"1\"><stop id=\"sky-stop-1\" stop-color=\"#9fe0ec\"/><stop id=\"sky-stop-2\" offset=\"1\" stop-color=\"#f9e7b7\"/></linearGradient><linearGradient id=\"shell\" x2=\"0\" y2=\"1\"><stop id=\"shell-stop-1\" stop-color=\"#fff2ba\"/><stop id=\"shell-stop-2\" offset=\"1\" stop-color=\"#f3bb56\"/></linearGradient><clipPath id=\"groundClip\"><rect x=\"0\" y=\"0\" width=\"1080\" height=\"1080\"/></clipPath></defs><rect id=\"bg-rect\" width=\"1080\" height=\"1080\" fill=\"url(#sky)\"/><g id=\"clouds\" fill=\"#fff\" opacity=\".56\"><ellipse cx=\"140\" cy=\"220\" rx=\"100\" ry=\"22\"/><ellipse cx=\"870\" cy=\"280\" rx=\"135\" ry=\"27\"/></g><g clip-path=\"url(#groundClip)\"><path id=\"m-path-1\" d=\"M0 710 Q160 570 290 665 Q480 490 630 660 Q820 500 1080 685 V1080 H0Z\" fill=\"#b5c89b\"/><path id=\"m-path-2\" d=\"M0 814 Q190 680 360 786 Q600 635 780 766 Q940 680 1080 750 V1080 H0Z\" fill=\"#79a967\"/><path id=\"m-path-3\" d=\"M0 905 Q245 810 475 880 Q785 790 1080 875 V1080 H0Z\" fill=\"#528b61\"/></g><g id=\"shadow\"><ellipse cx=\"540\" cy=\"880\" rx=\"144\" ry=\"22\" fill=\"#314f42\" opacity=\".22\"/></g><g id=\"drone-wrapper\"><g id=\"drone\"><g id=\"armBack\" fill=\"none\" stroke=\"#373c54\" stroke-width=\"27\" stroke-linecap=\"round\"><path d=\"M455 521 L279 455 L218 455 M625 521 L801 455 L862 455\"/></g><g fill=\"#5b6076\" stroke=\"#38384f\" stroke-width=\"11\"><ellipse cx=\"217\" cy=\"453\" rx=\"53\" ry=\"27\"/><ellipse cx=\"863\" cy=\"453\" rx=\"53\" ry=\"27\"/></g><g id=\"rearLeft\" class=\"rotor\" transform=\"translate(217 430)\"><ellipse rx=\"116\" ry=\"13\" fill=\"#364c5a\" opacity=\".65\"/><ellipse class=\"rotor-cap\" rx=\"20\" ry=\"20\" fill=\"#f6d276\"/></g><g id=\"rearRight\" class=\"rotor\" transform=\"translate(863 430)\"><ellipse rx=\"116\" ry=\"13\" fill=\"#364c5a\" opacity=\".65\"/><ellipse class=\"rotor-cap\" rx=\"20\" ry=\"20\" fill=\"#f6d276\"/></g><path d=\"M445 630 L427 716 Q430 737 455 737 H504 M635 630 L653 716 Q650 737 625 737 H576\" fill=\"none\" stroke=\"#34394c\" stroke-width=\"17\" stroke-linecap=\"round\"/><path id=\"leg-accent\" d=\"M460 628 L448 704 M620 628 L632 704\" fill=\"none\" stroke=\"#d59e49\" stroke-width=\"8\"/><g id=\"armFront\" fill=\"none\" stroke=\"#383d54\" stroke-width=\"29\" stroke-linecap=\"round\"><path d=\"M446 566 L250 537 L183 541 M634 566 L830 537 L897 541\"/></g><path id=\"shell-base\" d=\"M465 493 Q540 449 615 493 L666 548 Q649 628 601 661 H479 Q431 627 414 548Z\" fill=\"#b68350\" stroke=\"#3c3548\" stroke-width=\"12\"/><path d=\"M465 481 Q540 442 615 481 L655 541 Q640 609 600 642 H480 Q440 609 425 541Z\" fill=\"url(#shell)\" stroke=\"#3c3548\" stroke-width=\"12\"/><path d=\"M474 479 Q540 449 605 479\" fill=\"none\" stroke=\"#fff6d4\" stroke-width=\"14\" stroke-linecap=\"round\"/><ellipse id=\"eye-ring\" cx=\"540\" cy=\"557\" rx=\"68\" ry=\"57\" fill=\"#24263e\" stroke=\"#e3a549\" stroke-width=\"10\"/><ellipse id=\"eye\" cx=\"540\" cy=\"552\" rx=\"40\" ry=\"37\" fill=\"#31a8bd\"/><circle cx=\"525\" cy=\"540\" r=\"13\" fill=\"#c8f8ff\" opacity=\".85\"/><path d=\"M454 487 L460 473 M620 473 L627 487\" stroke=\"#40394b\" stroke-width=\"9\"/><g fill=\"#494d65\" stroke=\"#37374f\" stroke-width=\"9\"><ellipse cx=\"182\" cy=\"539\" rx=\"47\" ry=\"25\"/><ellipse cx=\"898\" cy=\"539\" rx=\"47\" ry=\"25\"/></g><g id=\"frontLeft\" class=\"rotor\" transform=\"translate(182 519)\"><ellipse rx=\"117\" ry=\"14\" fill=\"#334a59\" opacity=\".72\"/><ellipse class=\"rotor-cap\" rx=\"20\" ry=\"20\" fill=\"#ffe3a0\"/></g><g id=\"frontRight\" class=\"rotor\" transform=\"translate(898 519)\"><ellipse rx=\"117\" ry=\"14\" fill=\"#334a59\" opacity=\".72\"/><ellipse class=\"rotor-cap\" rx=\"20\" ry=\"20\" fill=\"#ffe3a0\"/></g></g></g></svg></div>",
+  "css": "#stage{position:absolute;width:100%;height:100%;overflow:hidden;background:#9fe0ec}#stage svg{display:block;width:100%;height:100%}",
+  "render": "const svg = ctx.root.querySelector('svg');\nif (!svg) return;\n\nconst t = ctx.time;\nconst p = ctx.params;\n\n// 1. GESTIÓN DEL FONDO (SÓLIDO VS GRADIENTE)\nconst bgRect = svg.querySelector('#bg-rect');\nif (p.bg_type === 'solid') {\n  bgRect.setAttribute('fill', p.bg_solid_color || '#00FF00');\n} else {\n  bgRect.setAttribute('fill', 'url(#sky)');\n  svg.querySelector('#sky-stop-1').setAttribute('stop-color', p.sky_top_color || '#9fe0ec');\n  svg.querySelector('#sky-stop-2').setAttribute('stop-color', p.sky_bottom_color || '#f9e7b7');\n}\n\n// 2. CONFIGURACIÓN DE NUBES Y MONTAÑAS\nconst clouds = svg.querySelector('#clouds');\nclouds.style.display = p.show_clouds ? 'block' : 'none';\nif (p.show_clouds) {\n  clouds.setAttribute('transform', `translate(${Math.sin(t * 0.35) * 20} 0)`);\n}\n\nsvg.querySelector('#m-path-1').setAttribute('fill', p.mountain_color_1 || '#b5c89b');\nsvg.querySelector('#m-path-2').setAttribute('fill', p.mountain_color_2 || '#79a967');\nsvg.querySelector('#m-path-3').setAttribute('fill', p.mountain_color_3 || '#528b61');\n\n// 3. COLORES DEL DRON Y DETALLES\nsvg.querySelector('#shell-stop-1').setAttribute('stop-color', p.drone_shell_top || '#fff2ba');\nsvg.querySelector('#shell-stop-2').setAttribute('stop-color', p.drone_shell_bottom || '#f3bb56');\nsvg.querySelector('#shell-base').setAttribute('fill', p.drone_shell_bottom || '#f3bb56');\nsvg.querySelector('#eye-ring').setAttribute('stroke', p.drone_accent_color || '#e3a549');\nsvg.querySelector('#leg-accent').setAttribute('stroke', p.drone_accent_color || '#e3a549');\nsvg.querySelector('#eye').setAttribute('fill', p.eye_color || '#31a8bd');\n\nsvg.querySelectorAll('.rotor-cap').forEach(cap => {\n  cap.setAttribute('fill', p.drone_shell_top || '#fff2ba');\n});\n\n// 4. ANIMACIÓN Y FÍSICA DEL DRON\nconst motionMult = p.motion !== undefined ? p.motion : 1;\nconst hoverSpeedMult = p.hover_speed !== undefined ? p.hover_speed : 1;\nconst rotorSpeedMult = p.rotor_speed !== undefined ? p.rotor_speed : 1;\nconst droneScale = p.drone_scale !== undefined ? p.drone_scale : 1.0;\n\nconst drone = svg.querySelector('#drone');\nconst appear = Math.min(1, Math.max(0, (t - 0.32) / 1.18));\nconst smooth = x => x * x * (3 - 2 * x);\nconst lift = 1 - smooth(appear);\n\nconst bob = Math.sin(t * 4.6 * hoverSpeedMult) * 11 * motionMult;\nconst drift = Math.sin(t * 1.1 * hoverSpeedMult) * 24 * motionMult;\nconst rise = lift * 480;\nconst roll = Math.sin(t * 2.25 * hoverSpeedMult) * 2.2 * motionMult;\n\ndrone.setAttribute('transform', `translate(${drift} ${-rise + bob}) rotate(${roll} 540 550) scale(${droneScale})`);\n\n// 5. SOMBRA EN EL SUELO\nconst shadow = svg.querySelector('#shadow');\nif (p.show_shadow) {\n  shadow.style.display = 'block';\n  shadow.setAttribute('opacity', String(Math.max(0.1, 1 - lift * 0.9)));\n} else {\n  shadow.style.display = 'none';\n}\n\n// 6. ROTACIÓN DE HÉLICES Y PARPADEO\nfor (let i = 0; i < 4; i++) {\n  const el = svg.querySelectorAll('.rotor')[i];\n  const x = [217, 863, 182, 898][i];\n  const y = [430, 430, 519, 519][i];\n  const stretch = 0.52 + 0.48 * Math.abs(Math.sin((t * 34 * rotorSpeedMult) + i * 1.7));\n  el.setAttribute('transform', `translate(${x} ${y}) scale(${stretch} 1)`);\n}\n\nconst eye = svg.querySelector('#eye');\nconst blink = Math.max(0, 1 - Math.abs((t % 3.7) - 2.55) / 0.12);\neye.setAttribute('ry', String(37 * (1 - blink * 0.93)));\n",
+  "seed": 1,
+  "stops": [],
+  "recommended": {
+    "duration": 8.45,
+    "aspect": "square",
+    "resolution": 1080
+  },
+  "metadata": {
+    "description": "Animación personalizable de dron volando sobre montañas con soporte para chroma key y control fino de movimiento."
+  },
+  "editorSettings": {
+    "background": "#9fe0ec"
+  }
+}
