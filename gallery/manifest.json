@@ -70,5 +70,29 @@
     "file": "pastillas-texto-apilables.mgt.json",
     "preview": "media/pastillas-texto-apilables.mp4",
     "license": "CC0-1.0"
+  },
+  {
+    "id": "barra-marquesina-noticiero-deportes",
+    "title": "Barra Marquesina · Noticiero Deportes",
+    "description": "Marquesina deportiva para noticias, resultados y titulares en movimiento.",
+    "file": "barra-marquesina-noticiero-deportes.mgt.json",
+    "preview": "media/barra-marquesina-noticiero-deportes.mp4",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "simulador-tv-vhs-retro-crt",
+    "title": "Simulador TV VHS Retro CRT",
+    "description": "Simulación de pantalla de televisión VHS con interferencias, CRT y fondos configurables.",
+    "file": "simulador-tv-vhs-retro-crt.mgt.json",
+    "preview": "media/simulador-tv-vhs-retro-crt.mp4",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "reloj-paletas-flip-clock",
+    "title": "Reloj de Paletas · Contador Regresivo",
+    "description": "Contador regresivo con estética de reloj de paletas y transición flip clock.",
+    "file": "reloj-paletas-flip-clock.mgt.json",
+    "preview": "media/reloj-paletas-flip-clock.mp4",
+    "license": "CC0-1.0"
   }
 ]

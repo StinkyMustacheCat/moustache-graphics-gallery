@@ -1,0 +1,95 @@
+{
+  "version": 2,
+  "name": "Reloj de Paletas Contador Regresivo (Flip Clock) vf",
+  "parameters": [
+    {
+      "id": "start_sec",
+      "label": "Segundos Iniciales",
+      "type": "number",
+      "randomize": false,
+      "min": 1,
+      "max": 3600,
+      "step": 1,
+      "default": 30
+    },
+    {
+      "id": "format",
+      "label": "Formato de Tiempo",
+      "type": "select",
+      "randomize": false,
+      "options": [
+        "SS",
+        "MM:SS"
+      ],
+      "default": "SS"
+    },
+    {
+      "id": "bg_color",
+      "label": "Color de Fondo (Chroma)",
+      "type": "color",
+      "randomize": false,
+      "default": "#00FF00"
+    },
+    {
+      "id": "card_color",
+      "label": "Color de la Tarjeta",
+      "type": "color",
+      "randomize": false,
+      "default": "#1C1C1E"
+    },
+    {
+      "id": "text_color",
+      "label": "Color de los Números",
+      "type": "color",
+      "randomize": false,
+      "default": "#FFFFFF"
+    },
+    {
+      "id": "font_family",
+      "label": "Tipografía",
+      "type": "select",
+      "randomize": false,
+      "options": [
+        "Impact",
+        "Arial Black",
+        "Courier New",
+        "Trebuchet MS",
+        "Georgia"
+      ],
+      "default": "Impact"
+    },
+    {
+      "id": "card_size",
+      "label": "Tamaño del Reloj (px)",
+      "type": "number",
+      "randomize": false,
+      "min": 100,
+      "max": 700,
+      "step": 10,
+      "default": 320
+    },
+    {
+      "id": "flip_speed",
+      "label": "Duración de Caída (seg)",
+      "type": "number",
+      "randomize": false,
+      "min": 0.1,
+      "max": 0.8,
+      "step": 0.05,
+      "default": 0.35
+    }
+  ],
+  "html": "<div id=\"clock-wrapper\">\n  <div id=\"flip-clock\">\n    <div class=\"digit-card\" id=\"card-m1\"><div class=\"top\"><span>0</span></div><div class=\"bottom\"><span>0</span></div><div class=\"flip-top\"><span>0</span></div><div class=\"flip-bottom\"><span>0</span></div><div class=\"hinge\"></div></div>\n    <div class=\"digit-card\" id=\"card-m2\"><div class=\"top\"><span>0</span></div><div class=\"bottom\"><span>0</span></div><div class=\"flip-top\"><span>0</span></div><div class=\"flip-bottom\"><span>0</span></div><div class=\"hinge\"></div></div>\n    <div id=\"colon\">:</div>\n    <div class=\"digit-card\" id=\"card-s1\"><div class=\"top\"><span>0</span></div><div class=\"bottom\"><span>0</span></div><div class=\"flip-top\"><span>0</span></div><div class=\"flip-bottom\"><span>0</span></div><div class=\"hinge\"></div></div>\n    <div class=\"digit-card\" id=\"card-s2\"><div class=\"top\"><span>0</span></div><div class=\"bottom\"><span>0</span></div><div class=\"flip-top\"><span>0</span></div><div class=\"flip-bottom\"><span>0</span></div><div class=\"hinge\"></div></div>\n  </div>\n</div>",
+  "css": "#clock-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; }\n#flip-clock { display: flex; align-items: center; justify-content: center; gap: 15px; }\n#colon { font-weight: bold; line-height: 1; display: none; margin: 0 5px; }\n.digit-card { position: relative; width: 200px; height: 260px; border-radius: 12px; perspective: 1000px; box-shadow: 0 12px 30px rgba(0,0,0,0.5); }\n.digit-card .top, .digit-card .bottom, .digit-card .flip-top, .digit-card .flip-bottom {\n  position: absolute; left: 0; width: 100%; height: 50%; overflow: hidden; display: flex; justify-content: center; box-sizing: border-box;\n}\n.digit-card .top, .digit-card .flip-top {\n  top: 0; border-top-left-radius: 12px; border-top-right-radius: 12px; align-items: flex-end; border-bottom: 1px solid rgba(0,0,0,0.6);\n}\n.digit-card .bottom, .digit-card .flip-bottom {\n  bottom: 0; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; align-items: flex-start; border-top: 1px solid rgba(255,255,255,0.1);\n}\n.digit-card span { position: absolute; height: 200%; display: flex; align-items: center; justify-content: center; width: 100%; line-height: 1; font-weight: bold; }\n.digit-card .top span, .digit-card .flip-top span { top: 0; }\n.digit-card .bottom span, .digit-card .flip-bottom span { bottom: 0; }\n.digit-card .flip-top { transform-origin: bottom; backface-visibility: hidden; z-index: 3; }\n.digit-card .flip-bottom { transform-origin: top; backface-visibility: hidden; z-index: 2; transform: rotateX(90deg); }\n.digit-card .hinge { position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: rgba(0,0,0,0.8); transform: translateY(-50%); z-index: 4; }",
+  "render": "const { root, params, progress, duration, time, width, height } = ctx;\nconst wrapper = root.querySelector('#clock-wrapper');\nconst clock = root.querySelector('#flip-clock');\nconst colon = root.querySelector('#colon');\n\nif (wrapper) wrapper.style.backgroundColor = params.bg_color;\n\nconst isMMSS = params.format === 'MM:SS';\nif (colon) colon.style.display = isMMSS ? 'block' : 'none';\n\nconst cardM1 = root.querySelector('#card-m1');\nconst cardM2 = root.querySelector('#card-m2');\nif (cardM1) cardM1.style.display = isMMSS ? 'block' : 'none';\nif (cardM2) cardM2.style.display = isMMSS ? 'block' : 'none';\n\nconst totalSec = params.start_sec;\nconst currentTotalTime = Math.max(0, totalSec - (progress * totalSec));\nconst currentSecInt = Math.floor(currentTotalTime);\nconst nextSecInt = Math.max(0, currentSecInt - 1);\n\nconst secFraction = currentTotalTime - currentSecInt; \nconst flipWindow = Math.min(0.9, params.flip_speed);\nconst flipProgress = secFraction < flipWindow ? (1 - (secFraction / flipWindow)) : 0;\n\nfunction getDigits(val) {\n  const m = Math.floor(val / 60);\n  const s = Math.floor(val % 60);\n  const mStr = String(m).padStart(2, '0');\n  const sStr = String(s).padStart(2, '0');\n  return { m1: mStr[0], m2: mStr[1], s1: sStr[0], s2: sStr[1], fullS: String(val).padStart(2, '0') };\n}\n\nconst curDigits = getDigits(currentSecInt);\nconst nextDigits = getDigits(nextSecInt);\n\nconst cards = [\n  { el: root.querySelector('#card-m1'), cur: curDigits.m1, next: nextDigits.m1, show: isMMSS },\n  { el: root.querySelector('#card-m2'), cur: curDigits.m2, next: nextDigits.m2, show: isMMSS },\n  { el: root.querySelector('#card-s1'), cur: isMMSS ? curDigits.s1 : curDigits.fullS[0], next: isMMSS ? nextDigits.s1 : nextDigits.fullS[0], show: true },\n  { el: root.querySelector('#card-s2'), cur: isMMSS ? curDigits.s2 : curDigits.fullS[1], next: isMMSS ? nextDigits.s2 : nextDigits.fullS[1], show: true }\n];\n\nconst h = params.card_size;\nconst w = Math.round(h * 0.72);\nconst fontSize = Math.round(h * 0.82);\n\nif (colon) {\n  colon.style.fontSize = fontSize + 'px';\n  colon.style.color = params.text_color;\n  colon.style.fontFamily = params.font_family;\n}\n\ncards.forEach(c => {\n  if (!c.el || !c.show) return;\n  c.el.style.width = w + 'px';\n  c.el.style.height = h + 'px';\n  \n  const tops = c.el.querySelectorAll('.top, .flip-top');\n  const bottoms = c.el.querySelectorAll('.bottom, .flip-bottom');\n  \n  c.el.querySelectorAll('.top, .bottom, .flip-top, .flip-bottom').forEach(part => {\n    part.style.backgroundColor = params.card_color;\n  });\n\n  c.el.querySelectorAll('span').forEach(sp => {\n    sp.style.color = params.text_color;\n    sp.style.fontFamily = params.font_family;\n    sp.style.fontSize = fontSize + 'px';\n  });\n\n  const topStatic = c.el.querySelector('.top span');\n  const bottomStatic = c.el.querySelector('.bottom span');\n  const flipTop = c.el.querySelector('.flip-top');\n  const flipTopSpan = c.el.querySelector('.flip-top span');\n  const flipBottom = c.el.querySelector('.flip-bottom');\n  const flipBottomSpan = c.el.querySelector('.flip-bottom span');\n\n  const isFlipping = c.cur !== c.next && flipProgress > 0;\n\n  if (!isFlipping) {\n    if (topStatic) topStatic.textContent = c.cur;\n    if (bottomStatic) bottomStatic.textContent = c.cur;\n    if (flipTop) flipTop.style.transform = 'rotateX(0deg)';\n    if (flipBottom) flipBottom.style.transform = 'rotateX(90deg)';\n    if (flipTopSpan) flipTopSpan.textContent = c.cur;\n    if (flipBottomSpan) flipBottomSpan.textContent = c.next;\n  } else {\n    if (topStatic) topStatic.textContent = c.next;\n    if (bottomStatic) bottomStatic.textContent = c.cur;\n    if (flipTopSpan) flipTopSpan.textContent = c.cur;\n    if (flipBottomSpan) flipBottomSpan.textContent = c.next;\n\n    if (flipProgress <= 0.5) {\n      const topDeg = flipProgress * 2 * 90;\n      if (flipTop) flipTop.style.transform = `rotateX(-${topDeg}deg)`;\n      if (flipBottom) flipBottom.style.transform = 'rotateX(90deg)';\n    } else {\n      const botDeg = 90 - ((flipProgress - 0.5) * 2 * 90);\n      if (flipTop) flipTop.style.transform = 'rotateX(-90deg)';\n      if (flipBottom) flipBottom.style.transform = `rotateX(${botDeg}deg)`;\n    }\n  }\n});",
+  "seed": 1,
+  "stops": [],
+  "recommended": {
+    "duration": 10,
+    "aspect": "horizontal",
+    "resolution": 1080
+  },
+  "editorSettings": {
+    "background": "#172326"
+  }
+}

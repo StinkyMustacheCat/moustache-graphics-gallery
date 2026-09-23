@@ -1,0 +1,151 @@
+{
+  "version": 2,
+  "name": "Simulador TV / VHS Retro CRT con Fondos",
+  "parameters": [
+    {
+      "id": "bg_type",
+      "label": "Tipo de Fondo (1:Barras, 2:Azul VCR, 3:Nieve, 4:Chroma Sólido)",
+      "type": "number",
+      "randomize": false,
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "id": "chroma_color",
+      "label": "Color Fondo Sólido / Chroma",
+      "type": "color",
+      "randomize": false,
+      "default": "#00FF00"
+    },
+    {
+      "id": "vhs_status_text",
+      "label": "Texto OSD Principal",
+      "type": "text",
+      "randomize": false,
+      "default": "PLAY  ▶"
+    },
+    {
+      "id": "tape_mode",
+      "label": "Modo de Cinta / Canal",
+      "type": "text",
+      "randomize": false,
+      "default": "AUTO - CH 03"
+    },
+    {
+      "id": "show_timecode",
+      "label": "Mostrar Código de Tiempo",
+      "type": "boolean",
+      "randomize": false,
+      "default": true
+    },
+    {
+      "id": "osd_color",
+      "label": "Color OSD (Fósforo VCR)",
+      "type": "color",
+      "randomize": false,
+      "default": "#00FF66"
+    },
+    {
+      "id": "rgb_shift",
+      "label": "Aberración Cromática (RGB Shift)",
+      "type": "number",
+      "randomize": false,
+      "min": 0,
+      "max": 25,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "id": "tracking_distortion",
+      "label": "Distorsión de Tracking VHS",
+      "type": "number",
+      "randomize": false,
+      "min": 0,
+      "max": 2,
+      "step": 0.1,
+      "default": 0.7
+    },
+    {
+      "id": "noise_intensity",
+      "label": "Nieve / Ruido Estático",
+      "type": "number",
+      "randomize": false,
+      "min": 0,
+      "max": 1,
+      "step": 0.05,
+      "default": 0.4
+    },
+    {
+      "id": "scanline_opacity",
+      "label": "Líneas de Escaneo CRT",
+      "type": "number",
+      "randomize": false,
+      "min": 0,
+      "max": 0.9,
+      "step": 0.05,
+      "default": 0.35
+    },
+    {
+      "id": "flicker_strength",
+      "label": "Parpadeo de Brillo CRT",
+      "type": "number",
+      "randomize": false,
+      "min": 0,
+      "max": 0.4,
+      "step": 0.02,
+      "default": 0.1
+    },
+    {
+      "id": "curvature_vignette",
+      "label": "Viñeteado / Cristal Tubo CRT",
+      "type": "number",
+      "randomize": false,
+      "min": 0,
+      "max": 1,
+      "step": 0.05,
+      "default": 0.7
+    },
+    {
+      "id": "tape_speed",
+      "label": "Velocidad de Reproducción",
+      "type": "number",
+      "randomize": false,
+      "min": 0.1,
+      "max": 3,
+      "step": 0.1,
+      "default": 1
+    },
+    {
+      "id": "font_size",
+      "label": "Tamaño de Fuente OSD",
+      "type": "number",
+      "randomize": false,
+      "min": 14,
+      "max": 50,
+      "step": 1,
+      "default": 26
+    },
+    {
+      "id": "screen_frame",
+      "label": "Mostrar Borde Marco TV",
+      "type": "boolean",
+      "randomize": false,
+      "default": true
+    }
+  ],
+  "html": "<canvas id=\"vhs-canvas\"></canvas>",
+  "css": "#vhs-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }",
+  "render": "const { root, params, time, width, height } = ctx;\nconst canvas = root.querySelector('#vhs-canvas');\nif (!canvas) return;\n\nif (canvas.width !== width || canvas.height !== height) {\n  canvas.width = width;\n  canvas.height = height;\n}\n\nconst c = canvas.getContext('2d');\n\nconst vhsStatus = params.vhs_status_text !== undefined ? params.vhs_status_text : 'PLAY  ▶';\nconst tapeMode = params.tape_mode !== undefined ? params.tape_mode : 'AUTO - CH 03';\nconst showTimecode = params.show_timecode !== false;\nconst osdColor = params.osd_color || '#00FF66';\nconst bgType = params.bg_type !== undefined ? params.bg_type : 1;\nconst chromaColor = params.chroma_color || '#00FF00';\n\nconst rgbShift = params.rgb_shift !== undefined ? params.rgb_shift : 8;\nconst trackingDist = params.tracking_distortion !== undefined ? params.tracking_distortion : 0.7;\nconst noiseIntensity = params.noise_intensity !== undefined ? params.noise_intensity : 0.4;\nconst scanlineAlpha = params.scanline_opacity !== undefined ? params.scanline_opacity : 0.35;\nconst flickerStr = params.flicker_strength !== undefined ? params.flicker_strength : 0.1;\nconst vignetteStr = params.curvature_vignette !== undefined ? params.curvature_vignette : 0.7;\nconst tapeSpeed = params.tape_speed || 1.0;\nconst fontSize = params.font_size || 26;\nconst showFrame = params.screen_frame !== false;\n\nconst t = time * tapeSpeed;\nconst flicker = 1 - (Math.random() * flickerStr);\n\nc.save();\n\nif (bgType === 1) {\n  c.fillStyle = '#000000';\n  c.fillRect(0, 0, width, height);\n  const barColors = ['#C0C0C0', '#C0C000', '#00C0C0', '#00C000', '#C000C0', '#C00000', '#0000C0'];\n  const barW = width / barColors.length;\n  const mainBarH = height * 0.72;\n  for (let i = 0; i < barColors.length; i++) {\n    c.fillStyle = barColors[i];\n    c.fillRect(i * barW, 0, barW + 1, mainBarH);\n  }\n  const botColors = ['#0000C0', '#131313', '#C000C0', '#131313', '#00C0C0', '#131313', '#C0C0C0'];\n  for (let i = 0; i < botColors.length; i++) {\n    c.fillStyle = botColors[i];\n    c.fillRect(i * barW, mainBarH, barW + 1, height - mainBarH);\n  }\n} else if (bgType === 2) {\n  c.fillStyle = '#0000B2';\n  c.fillRect(0, 0, width, height);\n} else if (bgType === 3) {\n  c.fillStyle = '#101010';\n  c.fillRect(0, 0, width, height);\n  c.fillStyle = '#FFFFFF';\n  const numDots = Math.floor(width * height * 0.08);\n  for (let n = 0; n < numDots; n++) {\n    const nx = Math.random() * width;\n    const ny = Math.random() * height;\n    c.globalAlpha = Math.random() * 0.8;\n    c.fillRect(nx, ny, 2, 2);\n  }\n} else if (bgType === 4) {\n  c.fillStyle = chromaColor;\n  c.fillRect(0, 0, width, height);\n}\nc.restore();\n\nif (bgType !== 4 && rgbShift > 0) {\n  c.save();\n  c.globalCompositeOperation = 'screen';\n  c.globalAlpha = 0.32;\n  c.fillStyle = '#FF0000';\n  c.fillRect(-rgbShift, 0, width, height);\n  c.fillStyle = '#00FFFF';\n  c.fillRect(rgbShift, 0, width, height);\n  c.restore();\n}\n\nif (bgType !== 4 && trackingDist > 0) {\n  c.save();\n  const rollY = ((t * 80) % (height + 150)) - 70;\n  const rollH = 45 * trackingDist;\n  if (rollY > -rollH && rollY < height) {\n    const displaceX = (Math.sin(t * 18) * 30 + (Math.random() - 0.5) * 20) * trackingDist;\n    try {\n      c.drawImage(canvas, 0, Math.max(0, rollY), width, rollH, displaceX, Math.max(0, rollY), width, rollH);\n    } catch(e) {}\n    c.fillStyle = 'rgba(255, 255, 255, 0.45)';\n    for (let l = 0; l < 8; l++) {\n      const ly = rollY + Math.random() * rollH;\n      if (ly >= 0 && ly <= height) {\n        c.fillRect(0, ly, width, 1 + Math.random() * 3);\n      }\n    }\n  }\n  c.restore();\n}\n\nif (bgType !== 4 && noiseIntensity > 0) {\n  c.save();\n  c.fillStyle = '#FFFFFF';\n  const numDots = Math.floor((width * height * 0.0004) * noiseIntensity);\n  for (let n = 0; n < numDots; n++) {\n    const nx = Math.random() * width;\n    const ny = Math.random() * height;\n    const nw = 1 + Math.random() * 3 * noiseIntensity;\n    const nh = 1 + Math.random() * 2;\n    c.globalAlpha = Math.random() * 0.45 * noiseIntensity;\n    c.fillRect(nx, ny, nw, nh);\n  }\n  c.restore();\n}\n\nif (bgType !== 4 && scanlineAlpha > 0) {\n  c.save();\n  c.fillStyle = '#000000';\n  c.globalAlpha = scanlineAlpha;\n  for (let y = 0; y < height; y += 3) {\n    c.fillRect(0, y, width, 1.2);\n  }\n  c.restore();\n}\n\nif (flickerStr > 0) {\n  c.save();\n  c.fillStyle = '#000000';\n  c.globalAlpha = (1 - flicker) * 0.6;\n  c.fillRect(0, 0, width, height);\n  c.restore();\n}\n\nif (vignetteStr > 0) {\n  c.save();\n  const grad = c.createRadialGradient(\n    width / 2, height / 2, Math.min(width, height) * 0.35,\n    width / 2, height / 2, Math.max(width, height) * 0.72\n  );\n  grad.addColorStop(0, 'rgba(0,0,0,0)');\n  grad.addColorStop(0.65, 'rgba(0,0,0,' + (0.35 * vignetteStr) + ')');\n  grad.addColorStop(1, 'rgba(0,0,0,' + (0.95 * vignetteStr) + ')');\n  c.fillStyle = grad;\n  c.fillRect(0, 0, width, height);\n  c.restore();\n}\n\nif (showFrame) {\n  c.save();\n  c.strokeStyle = '#120F0D';\n  c.lineWidth = Math.min(width, height) * 0.035;\n  c.strokeRect(0, 0, width, height);\n  c.strokeStyle = '#050505';\n  c.lineWidth = Math.min(width, height) * 0.015;\n  c.strokeRect(0, 0, width, height);\n  c.restore();\n}\n\nc.save();\nc.fillStyle = osdColor;\nc.shadowColor = osdColor;\nc.shadowBlur = 8;\nc.font = 'bold ' + fontSize + 'px Courier New, Courier, monospace';\n\nconst marginX = Math.max(25, width * 0.06);\nconst marginY = Math.max(30, height * 0.08);\n\nif (vhsStatus.trim().length > 0) {\n  c.textAlign = 'left';\n  c.textBaseline = 'top';\n  c.fillText(vhsStatus, marginX, marginY);\n}\n\nif (tapeMode.trim().length > 0) {\n  c.textAlign = 'right';\n  c.textBaseline = 'top';\n  c.fillText(tapeMode, width - marginX, marginY);\n}\n\nif (showTimecode) {\n  const totalSec = Math.floor(t);\n  const hrs = String(Math.floor(totalSec / 3600)).padStart(2, '0');\n  const mins = String(Math.floor((totalSec % 3600) / 60)).padStart(2, '0');\n  const secs = String(totalSec % 60).padStart(2, '0');\n  const timecodeStr = 'SP  ' + hrs + ':' + mins + ':' + secs;\n  c.textAlign = 'right';\n  c.textBaseline = 'bottom';\n  c.fillText(timecodeStr, width - marginX, height - marginY);\n}\n\nc.restore();",
+  "seed": 1,
+  "stops": [],
+  "recommended": {
+    "duration": 6,
+    "aspect": "horizontal",
+    "resolution": 1080
+  },
+  "editorSettings": {
+    "background": "#F2F5F8"
+  }
+}

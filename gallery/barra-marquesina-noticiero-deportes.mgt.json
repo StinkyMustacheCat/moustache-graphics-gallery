@@ -1,0 +1,160 @@
+{
+  "version": 2,
+  "name": "Barra Marquesina Noticiero / Deportes",
+  "parameters": [
+    {
+      "id": "ticker_text",
+      "label": "Texto Principal",
+      "type": "text",
+      "randomize": false,
+      "default": "ÚLTIMA HORA: TRANSMISIÓN EN VIVO • RESULTADOS EN TIEMPO REAL • MANTÉNGASE INFORMADO"
+    },
+    {
+      "id": "separator",
+      "label": "Separador Repetitivo",
+      "type": "text",
+      "randomize": false,
+      "default": " • "
+    },
+    {
+      "id": "badge_text",
+      "label": "Texto Etiqueta Fija",
+      "type": "text",
+      "randomize": false,
+      "default": "EN VIVO"
+    },
+    {
+      "id": "show_badge",
+      "label": "Mostrar Etiqueta Fija",
+      "type": "boolean",
+      "randomize": false,
+      "default": true
+    },
+    {
+      "id": "y_position_pct",
+      "label": "Posición Vertical % (0 Arriba - 100 Abajo)",
+      "type": "number",
+      "randomize": false,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 86
+    },
+    {
+      "id": "direction_left",
+      "label": "Desplazar a la Izquierda",
+      "type": "boolean",
+      "randomize": false,
+      "default": true
+    },
+    {
+      "id": "scroll_speed",
+      "label": "Velocidad de Desplazamiento",
+      "type": "number",
+      "randomize": false,
+      "min": 0.2,
+      "max": 8,
+      "step": 0.1,
+      "default": 1.5
+    },
+    {
+      "id": "bar_height",
+      "label": "Alto de la Barra",
+      "type": "number",
+      "randomize": false,
+      "min": 30,
+      "max": 120,
+      "step": 1,
+      "default": 120
+    },
+    {
+      "id": "font_size",
+      "label": "Tamaño de Texto",
+      "type": "number",
+      "randomize": false,
+      "min": 12,
+      "max": 48,
+      "step": 1,
+      "default": 48
+    },
+    {
+      "id": "font_family",
+      "label": "Fuente del Texto",
+      "type": "text",
+      "randomize": false,
+      "default": "Segoe UI, Arial, sans-serif"
+    },
+    {
+      "id": "bar_color",
+      "label": "Color Fondo Barra",
+      "type": "color",
+      "randomize": false,
+      "default": "#0D1117"
+    },
+    {
+      "id": "bar_opacity",
+      "label": "Opacidad del Fondo",
+      "type": "number",
+      "randomize": false,
+      "min": 0.1,
+      "max": 1,
+      "step": 0.05,
+      "default": 0.95
+    },
+    {
+      "id": "text_color",
+      "label": "Color del Texto",
+      "type": "color",
+      "randomize": false,
+      "default": "#FFFFFF"
+    },
+    {
+      "id": "separator_color",
+      "label": "Color del Punto / Separador",
+      "type": "color",
+      "randomize": false,
+      "default": "#FFD700"
+    },
+    {
+      "id": "badge_bg",
+      "label": "Fondo de Etiqueta Fija",
+      "type": "color",
+      "randomize": false,
+      "default": "#E50914"
+    },
+    {
+      "id": "badge_text_color",
+      "label": "Texto de Etiqueta Fija",
+      "type": "color",
+      "randomize": false,
+      "default": "#FFFFFF"
+    },
+    {
+      "id": "show_accent_line",
+      "label": "Mostrar Línea de Borde",
+      "type": "boolean",
+      "randomize": false,
+      "default": true
+    },
+    {
+      "id": "accent_line_color",
+      "label": "Color Línea de Borde",
+      "type": "color",
+      "randomize": false,
+      "default": "#E50914"
+    }
+  ],
+  "html": "<canvas id=\"ticker-canvas\"></canvas>",
+  "css": "#ticker-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }",
+  "render": "const { root, params, time, width, height } = ctx;\nconst canvas = root.querySelector('#ticker-canvas');\nif (!canvas) return;\n\nif (canvas.width !== width || canvas.height !== height) {\n  canvas.width = width;\n  canvas.height = height;\n}\n\nconst c = canvas.getContext('2d');\n\nconst tickerText = params.ticker_text !== undefined ? params.ticker_text : 'ÚLTIMA HORA: TRANSMISIÓN EN VIVO';\nconst separator = params.separator !== undefined ? params.separator : ' • ';\nconst badgeText = params.badge_text !== undefined ? params.badge_text : 'EN VIVO';\nconst showBadge = params.show_badge !== false;\nconst scrollSpeed = (params.scroll_speed || 1.5) * 80;\nconst moveLeft = params.direction_left !== false;\n\nconst yPct = Math.max(0, Math.min(100, params.y_position_pct !== undefined ? params.y_position_pct : 90)) / 100;\nconst barH = params.bar_height || 55;\nconst barY = (height - barH) * yPct;\n\nconst fontSize = params.font_size || 22;\nconst fontFamily = params.font_family || 'Segoe UI, Arial, sans-serif';\n\nconst barColor = params.bar_color || '#0D1117';\nconst barOpacity = params.bar_opacity !== undefined ? params.bar_opacity : 0.95;\nconst textColor = params.text_color || '#FFFFFF';\nconst separatorColor = params.separator_color || '#FFD700';\nconst badgeBg = params.badge_bg || '#E50914';\nconst badgeTextColor = params.badge_text_color || '#FFFFFF';\nconst showAccentLine = params.show_accent_line !== false;\nconst accentLineColor = params.accent_line_color || '#E50914';\n\n// Clear screen / background\nc.clearRect(0, 0, width, height);\n\n// 1. DIBUJAR FONDO DE LA BARRA COMPLETA\nc.save();\nc.globalAlpha = barOpacity;\nc.fillStyle = barColor;\nc.fillRect(0, barY, width, barH);\nc.restore();\n\n// Línea de acento/borde\nif (showAccentLine) {\n  c.save();\n  c.fillStyle = accentLineColor;\n  const lineH = 3;\n  const lineY = yPct > 0.5 ? barY : barY + barH - lineH;\n  c.fillRect(0, lineY, width, lineH);\n  c.restore();\n}\n\n// 2. MEDIR ETIQUETA FIJA (SI EXISTE)\nlet badgeW = 0;\nif (showBadge && badgeText.trim().length > 0) {\n  c.font = `bold ${Math.round(fontSize * 0.85)}px ${fontFamily}`;\n  const textW = c.measureText(badgeText).width;\n  badgeW = textW + 36;\n}\n\n// 3. DIBUJAR TEXTO DESLIZANTE (ÁREA RECORTADA)\nconst clipX = badgeW;\nconst clipW = width - badgeW;\n\nif (clipW > 0 && tickerText.length > 0) {\n  c.save();\n  c.beginPath();\n  c.rect(clipX, barY, clipW, barH);\n  c.clip();\n\n  c.font = `bold ${fontSize}px ${fontFamily}`;\n  const mainTextW = c.measureText(tickerText).width;\n  const sepW = c.measureText(separator).width;\n  const unitW = mainTextW + sepW;\n\n  if (unitW > 0) {\n    const totalDist = time * scrollSpeed;\n    const offset = totalDist % unitW;\n    \n    let startX = moveLeft ? (clipX - offset) : (clipX - unitW + offset);\n    \n    c.textBaseline = 'middle';\n    const textY = barY + barH / 2;\n\n    while (startX < clipX + clipW + unitW) {\n      if (startX + unitW > clipX - unitW) {\n        // Dibujar texto principal\n        c.fillStyle = textColor;\n        c.fillText(tickerText, startX, textY);\n        \n        // Dibujar separador con su propio color\n        c.fillStyle = separatorColor;\n        c.fillText(separator, startX + mainTextW, textY);\n      }\n      startX += unitW;\n    }\n  }\n  c.restore();\n}\n\n// 4. DIBUJAR ETIQUETA FIJA ENCIMA\nif (showBadge && badgeW > 0) {\n  c.save();\n  c.fillStyle = badgeBg;\n  c.fillRect(0, barY, badgeW, barH);\n  \n  c.fillStyle = 'rgba(255, 255, 255, 0.25)';\n  c.fillRect(badgeW - 3, barY, 3, barH);\n  \n  c.fillStyle = badgeTextColor;\n  c.font = `bold ${Math.round(fontSize * 0.85)}px ${fontFamily}`;\n  c.textAlign = 'center';\n  c.textBaseline = 'middle';\n  c.fillText(badgeText, badgeW / 2, barY + barH / 2);\n  c.restore();\n}",
+  "seed": 1,
+  "stops": [],
+  "recommended": {
+    "duration": 6,
+    "aspect": "horizontal",
+    "resolution": 1080
+  },
+  "editorSettings": {
+    "background": "#F2F5F8"
+  }
+}
