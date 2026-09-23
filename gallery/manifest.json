@@ -129,7 +129,7 @@
   },
   {
     "id": "pokimon",
-    "title": "Pokimon",
+    "title": "Pa Qui Monsters",
     "description": "Composición temática con entrada de flash inicial y estética inspirada en criaturas.",
     "file": "pokimon.mgt.json",
     "preview": "media/pokimon.mp4",
@@ -141,6 +141,7 @@
     "description": "Efecto de texto con cambios rápidos de color y parpadeos; se recomienda precaución al visualizarlo.",
     "file": "epilepcia.mgt.json",
     "preview": "media/epilepcia.mp4",
-    "license": "MIT"
+    "license": "MIT",
+    "sensitiveWarning": "Esta composición contiene parpadeos y cambios rápidos de color que pueden provocar molestias o convulsiones en personas con epilepsia fotosensible. No continúes si tienes fotosensibilidad, migrañas sensibles a la luz o no estás seguro."
   }
 ]

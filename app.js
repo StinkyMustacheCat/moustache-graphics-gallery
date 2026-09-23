@@ -58,17 +58,44 @@ function createPreview(entry, card) {
   preview.append(video);
 }
 
+function createSensitiveGate(entry, card, activate) {
+  const preview = card.querySelector('.preview');
+  preview.innerHTML = '';
+  preview.classList.add('sensitive-preview');
+  const warning = document.createElement('div');
+  warning.className = 'sensitive-warning';
+  warning.innerHTML = `<strong>Contenido sensible</strong><p>${entry.sensitiveWarning}</p>`;
+  const continueButton = document.createElement('button');
+  continueButton.type = 'button';
+  continueButton.className = 'sensitive-continue';
+  continueButton.textContent = 'Mostrar bajo mi responsabilidad';
+  continueButton.addEventListener('click', () => {
+    activate();
+    continueButton.remove();
+  });
+  warning.append(continueButton);
+  preview.append(warning);
+}
+
 async function renderEntry(entry) {
   const card = template.content.cloneNode(true);
   card.querySelector('h2').textContent = entry.title;
   card.querySelector('.description').textContent = entry.description || '';
   card.querySelector('.license').textContent = entry.license || '';
-  createPreview(entry, card);
 
   const composition = await loadComposition(entry);
   const json = `${JSON.stringify(composition, null, 2)}\n`;
   const copyButton = card.querySelector('.copy');
+  const download = card.querySelector('.download');
+  const activate = () => {
+    copyButton.disabled = false;
+    download.removeAttribute('aria-disabled');
+    createPreview(entry, card);
+  };
+  copyButton.disabled = Boolean(entry.sensitiveWarning);
+  if (entry.sensitiveWarning) download.setAttribute('aria-disabled', 'true');
   copyButton.addEventListener('click', async () => {
+    if (copyButton.disabled) return;
     try {
       await navigator.clipboard.writeText(json);
       copyButton.textContent = 'Código copiado';
@@ -78,9 +105,16 @@ async function renderEntry(entry) {
     }
   });
 
-  const download = card.querySelector('.download');
   download.href = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
   download.download = entry.file;
+  download.addEventListener('click', (event) => {
+    if (entry.sensitiveWarning && copyButton.disabled) event.preventDefault();
+  });
+  if (entry.sensitiveWarning) {
+    createSensitiveGate(entry, card, activate);
+  } else {
+    activate();
+  }
   gallery.append(card);
 }
 
