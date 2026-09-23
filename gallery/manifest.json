@@ -30,5 +30,21 @@
     "file": "esfera-red-plexus.mgt.json",
     "preview": "media/esfera-plexus-con-texto.mp4",
     "license": "CC0-1.0"
+  },
+  {
+    "id": "contador-suscriptores-youtube",
+    "title": "Contador de Suscriptores YouTube",
+    "description": "Contador animado para mostrar el crecimiento de suscriptores con estética de canal.",
+    "file": "contador-suscriptores-youtube.mgt.json",
+    "preview": "media/contador-suscriptores-youtube.mp4",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "texto-tres-lineas-impacto",
+    "title": "Texto en 3 Líneas con Impacto y Caída Física",
+    "description": "Composición tipográfica de tres líneas con entrada de impacto y caída física.",
+    "file": "texto-tres-lineas-impacto.mgt.json",
+    "preview": "media/texto-tres-lineas-impacto.mp4",
+    "license": "CC0-1.0"
   }
 ]
