@@ -35,8 +35,7 @@ async function loadComposition(entry) {
   return response.json();
 }
 
-function createPreview(entry, card) {
-  const preview = card.querySelector('.preview');
+function createPreview(entry, preview) {
   if (!entry.preview) {
     preview.innerHTML = '<span class="no-preview">MP4 de demostración pendiente</span>';
     return;
@@ -58,8 +57,7 @@ function createPreview(entry, card) {
   preview.append(video);
 }
 
-function createSensitiveGate(entry, card, activate) {
-  const preview = card.querySelector('.preview');
+function createSensitiveGate(entry, preview, activate) {
   preview.innerHTML = '';
   preview.classList.add('sensitive-preview');
   const warning = document.createElement('div');
@@ -70,8 +68,9 @@ function createSensitiveGate(entry, card, activate) {
   continueButton.className = 'sensitive-continue';
   continueButton.textContent = 'Mostrar bajo mi responsabilidad';
   continueButton.addEventListener('click', () => {
+    preview.classList.remove('sensitive-preview');
+    preview.replaceChildren();
     activate();
-    continueButton.remove();
   });
   warning.append(continueButton);
   preview.append(warning);
@@ -82,6 +81,7 @@ async function renderEntry(entry) {
   card.querySelector('h2').textContent = entry.title;
   card.querySelector('.description').textContent = entry.description || '';
   card.querySelector('.license').textContent = entry.license || '';
+  const preview = card.querySelector('.preview');
 
   const composition = await loadComposition(entry);
   const json = `${JSON.stringify(composition, null, 2)}\n`;
@@ -90,7 +90,7 @@ async function renderEntry(entry) {
   const activate = () => {
     copyButton.disabled = false;
     download.removeAttribute('aria-disabled');
-    createPreview(entry, card);
+    createPreview(entry, preview);
   };
   copyButton.disabled = Boolean(entry.sensitiveWarning);
   if (entry.sensitiveWarning) download.setAttribute('aria-disabled', 'true');
@@ -111,7 +111,7 @@ async function renderEntry(entry) {
     if (entry.sensitiveWarning && copyButton.disabled) event.preventDefault();
   });
   if (entry.sensitiveWarning) {
-    createSensitiveGate(entry, card, activate);
+    createSensitiveGate(entry, preview, activate);
   } else {
     activate();
   }
