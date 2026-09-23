@@ -1,0 +1,128 @@
+{
+  "version": 2,
+  "name": "Velocímetro Deportivo (Estático o Animado)",
+  "parameters": [
+    {
+      "id": "auto_animate",
+      "label": "Modo Animado (Auto Aceleración)",
+      "type": "boolean",
+      "randomize": false,
+      "default": true
+    },
+    {
+      "id": "anim_speed",
+      "label": "Velocidad de Aceleración",
+      "type": "number",
+      "randomize": false,
+      "min": 0.2,
+      "max": 3,
+      "step": 0.1,
+      "default": 1
+    },
+    {
+      "id": "speed",
+      "label": "Velocidad Estática (KM/H)",
+      "type": "number",
+      "randomize": false,
+      "min": 0,
+      "max": 320,
+      "step": 1,
+      "default": 120
+    },
+    {
+      "id": "max_speed",
+      "label": "Velocidad Máxima",
+      "type": "number",
+      "randomize": false,
+      "min": 80,
+      "max": 360,
+      "step": 20,
+      "default": 240
+    },
+    {
+      "id": "redline_start",
+      "label": "Zona Roja (% de Máx)",
+      "type": "number",
+      "randomize": false,
+      "min": 50,
+      "max": 95,
+      "step": 5,
+      "default": 80
+    },
+    {
+      "id": "gauge_scale",
+      "label": "Tamaño del Marcador",
+      "type": "number",
+      "randomize": false,
+      "min": 0.5,
+      "max": 1.5,
+      "step": 0.05,
+      "default": 1
+    },
+    {
+      "id": "center_y",
+      "label": "Posición Vertical Y",
+      "type": "number",
+      "randomize": false,
+      "min": -150,
+      "max": 150,
+      "step": 5,
+      "default": 0
+    },
+    {
+      "id": "show_border",
+      "label": "Mostrar Borde Metálico",
+      "type": "boolean",
+      "randomize": false,
+      "default": true
+    },
+    {
+      "id": "show_digital",
+      "label": "Mostrar Pantalla Digital",
+      "type": "boolean",
+      "randomize": false,
+      "default": true
+    },
+    {
+      "id": "show_active_arc",
+      "label": "Mostrar Arco de Velocidad",
+      "type": "boolean",
+      "randomize": false,
+      "default": true
+    },
+    {
+      "id": "needle_color",
+      "label": "Color de Aguja",
+      "type": "color",
+      "randomize": false,
+      "default": "#FF3344"
+    },
+    {
+      "id": "accent_color",
+      "label": "Color Principal / Leds",
+      "type": "color",
+      "randomize": false,
+      "default": "#00E5FF"
+    },
+    {
+      "id": "bg_color",
+      "label": "Color de Fondo",
+      "type": "color",
+      "randomize": false,
+      "default": "#0B0E14"
+    }
+  ],
+  "html": "<canvas id=\"speedo-canvas\"></canvas>",
+  "css": "#speedo-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }",
+  "render": "const { root, params, time, width, height } = ctx;\nconst canvas = root.querySelector('#speedo-canvas');\nif (!canvas) return;\n\nif (canvas.width !== width || canvas.height !== height) {\n  canvas.width = width;\n  canvas.height = height;\n}\n\nconst c = canvas.getContext('2d');\n\nconst maxSpeed = Math.max(40, params.max_speed || 240);\nconst autoAnimate = params.auto_animate === true;\nconst animSpeed = params.anim_speed || 1.0;\nconst staticSpeed = Math.min(Math.max(params.speed !== undefined ? params.speed : 120, 0), maxSpeed);\n\n// Cálculo de velocidad (Estática vs Animada)\nlet currentSpeed = staticSpeed;\nif (autoAnimate) {\n  const cycle = (Math.sin(time * animSpeed * 0.8 - Math.PI / 2) + 1) / 2;\n  currentSpeed = cycle * maxSpeed;\n}\n\nconst redlineStartPct = (params.redline_start || 80) / 100;\nconst scale = params.gauge_scale || 1.0;\nconst centerYOffset = params.center_y || 0;\n\nconst showBorder = params.show_border !== false;\nconst showDigital = params.show_digital !== false;\nconst showActiveArc = params.show_active_arc !== false;\n\nconst needleColor = params.needle_color || '#FF3344';\nconst accentColor = params.accent_color || '#00E5FF';\nconst bgColor = params.bg_color || '#0B0E14';\n\n// Posicionamiento\nconst cx = width / 2;\nconst cy = height / 2 + centerYOffset;\nconst radius = Math.min(width, height) * 0.38 * scale;\n\n// Fondo general\nc.fillStyle = bgColor;\nc.fillRect(0, 0, width, height);\n\n// Ángulos de barrido (135° a 405° = 270° totales)\nconst startAngle = Math.PI * 0.75;\nconst endAngle = Math.PI * 2.25;\nconst sweepAngle = endAngle - startAngle;\n\n// 1. MARCO EXTERIOR Y BISEL\nif (showBorder) {\n  c.save();\n  const outerGrad = c.createRadialGradient(cx, cy, radius * 0.95, cx, cy, radius * 1.15);\n  outerGrad.addColorStop(0, '#1E2533');\n  outerGrad.addColorStop(0.5, '#3A4659');\n  outerGrad.addColorStop(1, '#0F131C');\n  \n  c.beginPath();\n  c.arc(cx, cy, radius * 1.14, 0, Math.PI * 2);\n  c.fillStyle = outerGrad;\n  c.fill();\n  \n  c.beginPath();\n  c.arc(cx, cy, radius * 1.02, 0, Math.PI * 2);\n  c.fillStyle = '#10141D';\n  c.fill();\n  c.restore();\n}\n\n// Fondo del dial interior\nconst dialGrad = c.createRadialGradient(cx, cy, 0, cx, cy, radius);\ndialGrad.addColorStop(0, '#151A24');\ndialGrad.addColorStop(1, '#0B0E14');\nc.beginPath();\nc.arc(cx, cy, radius, 0, Math.PI * 2);\nc.fillStyle = dialGrad;\nc.fill();\n\n// 2. ARCO DE ZONA ROJA (Redline)\nconst redAngleStart = startAngle + sweepAngle * redlineStartPct;\nc.save();\nc.beginPath();\nc.arc(cx, cy, radius * 0.86, redAngleStart, endAngle);\nc.strokeStyle = '#FF2A4B';\nc.lineWidth = radius * 0.06;\nc.globalAlpha = 0.85;\nc.stroke();\nc.restore();\n\n// 3. ARCO DE VELOCIDAD ACTIVA\nconst speedRatio = currentSpeed / maxSpeed;\nconst engineJitter = currentSpeed > 0 ? (Math.sin(time * 40) * 0.003 * (currentSpeed / maxSpeed)) : 0;\nconst needleAngle = startAngle + speedRatio * sweepAngle + engineJitter;\n\nif (showActiveArc && speedRatio > 0) {\n  c.save();\n  c.beginPath();\n  c.arc(cx, cy, radius * 0.86, startAngle, needleAngle);\n  c.strokeStyle = accentColor;\n  c.lineWidth = radius * 0.06;\n  c.shadowColor = accentColor;\n  c.shadowBlur = 12;\n  c.globalAlpha = 0.7;\n  c.stroke();\n  c.restore();\n}\n\n// 4. TICKS Y NÚMEROS\nconst stepVal = maxSpeed <= 160 ? 10 : 20;\n\nfor (let i = 0; i <= maxSpeed; i += stepVal / 2) {\n  const isMajor = (i % stepVal === 0);\n  const ratio = i / maxSpeed;\n  const angle = startAngle + ratio * sweepAngle;\n  \n  const innerR = radius * (isMajor ? 0.70 : 0.78);\n  const outerR = radius * 0.84;\n  \n  const x1 = cx + Math.cos(angle) * innerR;\n  const y1 = cy + Math.sin(angle) * innerR;\n  const x2 = cx + Math.cos(angle) * outerR;\n  const y2 = cy + Math.sin(angle) * outerR;\n  \n  const isRed = ratio >= redlineStartPct;\n  \n  c.save();\n  c.beginPath();\n  c.moveTo(x1, y1);\n  c.lineTo(x2, y2);\n  c.strokeStyle = isRed ? '#FF2A4B' : (isMajor ? '#FFFFFF' : accentColor);\n  c.lineWidth = isMajor ? Math.max(2, radius * 0.02) : Math.max(1, radius * 0.008);\n  c.globalAlpha = isMajor ? 0.9 : 0.35;\n  if (isMajor && !isRed) {\n    c.shadowColor = accentColor;\n    c.shadowBlur = 4;\n  }\n  c.stroke();\n  c.restore();\n  \n  if (isMajor) {\n    const textR = radius * 0.56;\n    const tx = cx + Math.cos(angle) * textR;\n    const ty = cy + Math.sin(angle) * textR;\n    \n    c.save();\n    c.font = `bold ${Math.round(radius * 0.095)}px sans-serif`;\n    c.fillStyle = isRed ? '#FF5566' : '#E2E8F0';\n    c.textAlign = 'center';\n    c.textBaseline = 'middle';\n    c.fillText(i.toString(), tx, ty);\n    c.restore();\n  }\n}\n\n// 5. PANTALLA DIGITAL\nif (showDigital) {\n  const digY = cy + radius * 0.42;\n  const boxW = radius * 0.65;\n  const boxH = radius * 0.28;\n  \n  c.save();\n  c.fillStyle = '#06080D';\n  c.strokeStyle = accentColor;\n  c.lineWidth = 1.5;\n  c.globalAlpha = 0.85;\n  c.beginPath();\n  c.roundRect(cx - boxW / 2, digY - boxH / 2, boxW, boxH, 8);\n  c.fill();\n  c.stroke();\n  \n  c.globalAlpha = 1.0;\n  c.font = `bold ${Math.round(radius * 0.17)}px monospace`;\n  c.fillStyle = accentColor;\n  c.shadowColor = accentColor;\n  c.shadowBlur = 8;\n  c.textAlign = 'center';\n  c.textBaseline = 'middle';\n  c.fillText(Math.round(currentSpeed).toString(), cx, digY - radius * 0.02);\n  \n  c.font = `bold ${Math.round(radius * 0.06)}px sans-serif`;\n  c.fillStyle = '#64748B';\n  c.shadowBlur = 0;\n  c.fillText('KM/H', cx, digY + radius * 0.09);\n  c.restore();\n}\n\n// 6. AGUJA\nc.save();\nc.translate(cx, cy);\nc.rotate(needleAngle);\n\nc.shadowColor = 'rgba(0, 0, 0, 0.6)';\nc.shadowBlur = 10;\nc.shadowOffsetX = 4;\nc.shadowOffsetY = 4;\n\nc.fillStyle = needleColor;\nc.beginPath();\nc.moveTo(-radius * 0.12, 0);\nc.lineTo(0, -radius * 0.035);\nc.lineTo(radius * 0.80, 0);\nc.lineTo(0, radius * 0.035);\nc.closePath();\nc.fill();\n\nc.fillStyle = '#FFFFFF';\nc.globalAlpha = 0.3;\nc.beginPath();\nc.moveTo(0, -radius * 0.015);\nc.lineTo(radius * 0.75, 0);\nc.lineTo(0, radius * 0.015);\nc.closePath();\nc.fill();\n\nc.restore();\n\n// Capuchón central\nc.save();\nc.translate(cx, cy);\n\nc.beginPath();\nc.arc(0, 0, radius * 0.13, 0, Math.PI * 2);\nc.fillStyle = '#121721';\nc.fill();\nc.strokeStyle = needleColor;\nc.lineWidth = 2.5;\nc.stroke();\n\nc.beginPath();\nc.arc(0, 0, radius * 0.05, 0, Math.PI * 2);\nc.fillStyle = '#E2E8F0';\nc.fill();\n\nc.restore();",
+  "seed": 1,
+  "stops": [],
+  "recommended": {
+    "duration": 6,
+    "aspect": "horizontal",
+    "resolution": 1080
+  },
+  "editorSettings": {
+    "background": "#F2F5F8"
+  }
+}

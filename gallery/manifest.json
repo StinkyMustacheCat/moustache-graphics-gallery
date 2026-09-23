@@ -46,5 +46,29 @@
     "file": "texto-tres-lineas-impacto.mgt.json",
     "preview": "media/texto-tres-lineas-impacto.mp4",
     "license": "CC0-1.0"
+  },
+  {
+    "id": "monitor-ecg-marcapasos",
+    "title": "Monitor ECG · Marcapasos Configurable",
+    "description": "Monitor ECG configurable con pulso, trazado y estética de interfaz médica.",
+    "file": "monitor-ecg-marcapasos.mgt.json",
+    "preview": "media/monitor-ecg-marcapasos.mp4",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "velocimetro-deportivo",
+    "title": "Velocímetro Deportivo",
+    "description": "Velocímetro deportivo configurable, estático o animado, para datos y presentaciones.",
+    "file": "velocimetro-deportivo.mgt.json",
+    "preview": "media/velocimetro-deportivo.mp4",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "pastillas-texto-apilables",
+    "title": "Pastillas de Texto Apilables",
+    "description": "Bloques de texto apilables para construir composiciones limpias y modulares.",
+    "file": "pastillas-texto-apilables.mgt.json",
+    "preview": "media/pastillas-texto-apilables.mp4",
+    "license": "CC0-1.0"
   }
 ]

@@ -1,0 +1,194 @@
+{
+  "version": 2,
+  "name": "Pastillas de Texto Apilables",
+  "parameters": [
+    {
+      "id": "fall_speed",
+      "label": "Velocidad de Caída",
+      "type": "number",
+      "randomize": false,
+      "min": 0.3,
+      "max": 3,
+      "step": 0.1,
+      "default": 0.9
+    },
+    {
+      "id": "drop_delay",
+      "label": "Tiempo entre Caídas (s)",
+      "type": "number",
+      "randomize": false,
+      "min": 0.1,
+      "max": 1.5,
+      "step": 0.05,
+      "default": 0.45
+    },
+    {
+      "id": "loop_anim",
+      "label": "Bucle Continuo",
+      "type": "boolean",
+      "randomize": false,
+      "default": true
+    },
+    {
+      "id": "pill_width",
+      "label": "Ancho de Pastilla",
+      "type": "number",
+      "randomize": false,
+      "min": 150,
+      "max": 600,
+      "step": 10,
+      "default": 600
+    },
+    {
+      "id": "pill_height",
+      "label": "Alto de Pastilla",
+      "type": "number",
+      "randomize": false,
+      "min": 25,
+      "max": 90,
+      "step": 1,
+      "default": 90
+    },
+    {
+      "id": "pill_corner",
+      "label": "Redondeo de Bordes",
+      "type": "number",
+      "randomize": false,
+      "min": 0,
+      "max": 45,
+      "step": 1,
+      "default": 36
+    },
+    {
+      "id": "pill_gap",
+      "label": "Separación entre Pastillas",
+      "type": "number",
+      "randomize": false,
+      "min": 0,
+      "max": 25,
+      "step": 1,
+      "default": 25
+    },
+    {
+      "id": "font_family",
+      "label": "Fuente del Texto",
+      "type": "text",
+      "randomize": false,
+      "default": "Segoe UI, sans-serif"
+    },
+    {
+      "id": "font_size",
+      "label": "Tamaño de Texto",
+      "type": "number",
+      "randomize": false,
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "default": 36
+    },
+    {
+      "id": "pill_color",
+      "label": "Color de Pastilla",
+      "type": "color",
+      "randomize": false,
+      "default": "#182030"
+    },
+    {
+      "id": "text_color",
+      "label": "Color del Texto",
+      "type": "color",
+      "randomize": false,
+      "default": "#FFFFFF"
+    },
+    {
+      "id": "border_color",
+      "label": "Color Borde / Glow",
+      "type": "color",
+      "randomize": false,
+      "default": "#00E5FF"
+    },
+    {
+      "id": "bg_color",
+      "label": "Color de Fondo",
+      "type": "color",
+      "randomize": false,
+      "default": "#0B0E14"
+    },
+    {
+      "id": "show_glow",
+      "label": "Efecto Neón / Sombra",
+      "type": "boolean",
+      "randomize": false,
+      "default": true
+    },
+    {
+      "id": "text_1",
+      "label": "Pastilla 1 (Base)",
+      "type": "text",
+      "randomize": false,
+      "default": ""
+    },
+    {
+      "id": "text_2",
+      "label": "Pastilla 2",
+      "type": "text",
+      "randomize": false,
+      "default": "XD"
+    },
+    {
+      "id": "text_3",
+      "label": "Pastilla 3",
+      "type": "text",
+      "randomize": false,
+      "default": "PONER"
+    },
+    {
+      "id": "text_4",
+      "label": "Pastilla 4",
+      "type": "text",
+      "randomize": false,
+      "default": "SE QUE "
+    },
+    {
+      "id": "text_5",
+      "label": "Pastilla 5",
+      "type": "text",
+      "randomize": false,
+      "default": "YA NO "
+    },
+    {
+      "id": "text_6",
+      "label": "Pastilla 6",
+      "type": "text",
+      "randomize": false,
+      "default": "AYUDA"
+    },
+    {
+      "id": "text_7",
+      "label": "Pastilla 7 (Opcional - vacía ignora)",
+      "type": "text",
+      "randomize": false,
+      "default": ""
+    },
+    {
+      "id": "text_8",
+      "label": "Pastilla 8 (Opcional - vacía ignora)",
+      "type": "text",
+      "randomize": false,
+      "default": ""
+    }
+  ],
+  "html": "<canvas id=\"stack-canvas\"></canvas>",
+  "css": "#stack-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }",
+  "render": "const { root, params, time, width, height } = ctx;\nconst canvas = root.querySelector('#stack-canvas');\nif (!canvas) return;\n\nif (canvas.width !== width || canvas.height !== height) {\n  canvas.width = width;\n  canvas.height = height;\n}\n\nconst c = canvas.getContext('2d');\n\n// Filtrar solo las pastillas que tengan texto escrito\nconst activePills = [];\nfor (let i = 1; i <= 8; i++) {\n  const txt = params[`text_${i}`];\n  if (txt && typeof txt === 'string' && txt.trim().length > 0) {\n    activePills.push(txt.trim());\n  }\n}\n\nconst fallSpeed = params.fall_speed || 1.2;\nconst dropDelay = params.drop_delay || 0.45;\nconst pillW = params.pill_width || 340;\nconst pillH = params.pill_height || 50;\nconst pillCorner = params.pill_corner !== undefined ? params.pill_corner : 14;\nconst pillGap = params.pill_gap !== undefined ? params.pill_gap : 8;\nconst fontFamily = params.font_family || 'Segoe UI, sans-serif';\nconst fontSize = params.font_size || 18;\n\nconst pillBg = params.pill_color || '#182030';\nconst textColor = params.text_color || '#FFFFFF';\nconst borderColor = params.border_color || '#00E5FF';\nconst bgColor = params.bg_color || '#0B0E14';\nconst showGlow = params.show_glow !== false;\nconst loopAnim = params.loop_anim !== false;\n\n// Fondo\nc.fillStyle = bgColor;\nc.fillRect(0, 0, width, height);\n\nif (activePills.length === 0) return;\n\n// Easing con rebote físico (Bounce Out)\nfunction easeOutBounce(x) {\n  const n1 = 7.5625;\n  const d1 = 2.75;\n  if (x < 1 / d1) {\n    return n1 * x * x;\n  } else if (x < 2 / d1) {\n    return n1 * (x -= 1.5 / d1) * x + 0.75;\n  } else if (x < 2.5 / d1) {\n    return n1 * (x -= 2.25 / d1) * x + 0.9375;\n  } else {\n    return n1 * (x -= 2.625 / d1) * x + 0.984375;\n  }\n}\n\n// Cálculo de tiempos de animación\nconst N = activePills.length;\nconst totalStackH = N * pillH + (N - 1) * pillGap;\nconst floorY = (height + totalStackH) / 2;\nconst dropDuration = 0.85 / fallSpeed;\nconst cycleDuration = N * dropDelay + dropDuration + 2.5;\n\nlet t = time;\nif (loopAnim) {\n  t = time % cycleDuration;\n}\n\nconst cx = width / 2;\n\n// Dibujar cada pastilla activa\nfor (let j = 0; j < N; j++) {\n  const startT = j * dropDelay;\n  \n  if (t < startT) continue;\n  \n  const elapsed = t - startT;\n  const rawProgress = Math.min(1, elapsed / dropDuration);\n  const easedProgress = easeOutBounce(rawProgress);\n  \n  // Posición destino (j=0 es la base inferior)\n  const targetY = floorY - (j + 1) * pillH - j * pillGap;\n  const startY = -pillH - 80;\n  \n  const currentY = startY + (targetY - startY) * easedProgress;\n  \n  c.save();\n  c.translate(cx - pillW / 2, currentY);\n  \n  // Brillo neón opcional\n  if (showGlow) {\n    c.shadowColor = borderColor;\n    c.shadowBlur = 12;\n  }\n  \n  // Cuerpo de la pastilla\n  c.fillStyle = pillBg;\n  c.strokeStyle = borderColor;\n  c.lineWidth = 2;\n  \n  c.beginPath();\n  c.roundRect(0, 0, pillW, pillH, pillCorner);\n  c.fill();\n  c.stroke();\n  \n  // Texto centrado\n  c.shadowBlur = 0;\n  c.fillStyle = textColor;\n  c.font = `bold ${fontSize}px ${fontFamily}`;\n  c.textAlign = 'center';\n  c.textBaseline = 'middle';\n  c.fillText(activePills[j], pillW / 2, pillH / 2);\n  \n  c.restore();\n}",
+  "seed": 1,
+  "stops": [],
+  "recommended": {
+    "duration": 6,
+    "aspect": "horizontal",
+    "resolution": 1080
+  },
+  "editorSettings": {
+    "background": "#F2F5F8"
+  }
+}

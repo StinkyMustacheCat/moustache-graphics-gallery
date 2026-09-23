@@ -1,0 +1,127 @@
+{
+  "version": 2,
+  "name": "Monitor ECG / Marcapasos Configurable",
+  "parameters": [
+    {
+      "id": "bpm",
+      "label": "Frecuencia Cardíaca (BPM)",
+      "type": "number",
+      "randomize": false,
+      "min": 30,
+      "max": 200,
+      "step": 1,
+      "default": 75
+    },
+    {
+      "id": "amplitude",
+      "label": "Tamaño de Picos (Amplitud)",
+      "type": "number",
+      "randomize": false,
+      "min": 0.2,
+      "max": 2.5,
+      "step": 0.1,
+      "default": 1
+    },
+    {
+      "id": "vertical_offset",
+      "label": "Posición Vertical de Picos",
+      "type": "number",
+      "randomize": false,
+      "min": -150,
+      "max": 150,
+      "step": 5,
+      "default": 120
+    },
+    {
+      "id": "text_x",
+      "label": "Texto - Posición X",
+      "type": "number",
+      "randomize": false,
+      "min": 0,
+      "max": 300,
+      "step": 5,
+      "default": 75
+    },
+    {
+      "id": "text_y",
+      "label": "Texto - Posición Y",
+      "type": "number",
+      "randomize": false,
+      "min": 10,
+      "max": 300,
+      "step": 5,
+      "default": 110
+    },
+    {
+      "id": "font_size",
+      "label": "Tamaño Texto BPM",
+      "type": "number",
+      "randomize": false,
+      "min": 10,
+      "max": 48,
+      "step": 1,
+      "default": 48
+    },
+    {
+      "id": "show_border",
+      "label": "Mostrar Marco de Pantalla",
+      "type": "boolean",
+      "randomize": false,
+      "default": true
+    },
+    {
+      "id": "show_grid",
+      "label": "Mostrar Cuadrícula Médica",
+      "type": "boolean",
+      "randomize": false,
+      "default": true
+    },
+    {
+      "id": "sweep_speed",
+      "label": "Velocidad de Barrido",
+      "type": "number",
+      "randomize": false,
+      "min": 0.4,
+      "max": 2.5,
+      "step": 0.1,
+      "default": 1.7
+    },
+    {
+      "id": "line_width",
+      "label": "Grosor de Línea",
+      "type": "number",
+      "randomize": false,
+      "min": 1,
+      "max": 6,
+      "step": 0.5,
+      "default": 4
+    },
+    {
+      "id": "line_color",
+      "label": "Color de la Línea ECG",
+      "type": "color",
+      "randomize": false,
+      "default": "#00FF66"
+    },
+    {
+      "id": "bg_color",
+      "label": "Color de Fondo",
+      "type": "color",
+      "randomize": false,
+      "default": "#080E0A"
+    }
+  ],
+  "html": "<canvas id=\"ecg-canvas\"></canvas>",
+  "css": "#ecg-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }",
+  "render": "const { root, params, time, width, height } = ctx;\nconst canvas = root.querySelector('#ecg-canvas');\nif (!canvas) return;\n\nif (canvas.width !== width || canvas.height !== height) {\n  canvas.width = width;\n  canvas.height = height;\n}\n\nconst c = canvas.getContext('2d');\n\nconst bpm = params.bpm || 75;\nconst ampMult = params.amplitude !== undefined ? params.amplitude : 1.0;\nconst vertOffset = params.vertical_offset || 0;\nconst textPosX = params.text_x !== undefined ? params.text_x : 20;\nconst textPosY = params.text_y !== undefined ? params.text_y : 35;\nconst fontSize = params.font_size || 18;\n\nconst showBorder = params.show_border !== false;\nconst showGrid = params.show_grid !== false;\nconst lineColor = params.line_color || '#00FF66';\nconst bgColor = params.bg_color || '#080E0A';\nconst lineWidth = params.line_width || 2.5;\nconst sweepSpeed = (params.sweep_speed || 1.0) * 170;\n\n// Margen según si el borde está activo\nconst pad = showBorder ? Math.min(width, height) * 0.05 : 0;\nconst screenX = pad;\nconst screenY = pad;\nconst screenW = width - pad * 2;\nconst screenH = height - pad * 2;\n\n// Fondo y Marco Outer\nc.fillStyle = bgColor;\nif (showBorder) {\n  c.fillStyle = '#121614';\n  c.fillRect(0, 0, width, height);\n  \n  c.save();\n  c.fillStyle = bgColor;\n  c.strokeStyle = '#25332B';\n  c.lineWidth = 4;\n  c.beginPath();\n  c.roundRect(screenX, screenY, screenW, screenH, 10);\n  c.fill();\n  c.stroke();\n  c.restore();\n} else {\n  c.fillRect(0, 0, width, height);\n}\n\nc.save();\nc.beginPath();\nc.rect(screenX, screenY, screenW, screenH);\nc.clip();\n\n// 1. Cuadrícula médica\nif (showGrid) {\n  c.strokeStyle = lineColor;\n  c.lineWidth = 1;\n  const gridStep = 18 * Math.min(width, height) / 400;\n  \n  // Cuadrícula fina\n  c.globalAlpha = 0.06;\n  c.beginPath();\n  for (let x = screenX; x <= screenX + screenW; x += gridStep) {\n    c.moveTo(x, screenY);\n    c.lineTo(x, screenY + screenH);\n  }\n  for (let y = screenY; y <= screenY + screenH; y += gridStep) {\n    c.moveTo(screenX, y);\n    c.lineTo(screenX + screenW, y);\n  }\n  c.stroke();\n\n  // Cuadrícula principal (cada 5 celdas)\n  c.globalAlpha = 0.14;\n  c.lineWidth = 1.2;\n  c.beginPath();\n  for (let x = screenX; x <= screenX + screenW; x += gridStep * 5) {\n    c.moveTo(x, screenY);\n    c.lineTo(x, screenY + screenH);\n  }\n  for (let y = screenY; y <= screenY + screenH; y += gridStep * 5) {\n    c.moveTo(screenX, y);\n    c.lineTo(screenX + screenW, y);\n  }\n  c.stroke();\n  c.globalAlpha = 1.0;\n}\n\n// 2. Función de onda fisiológica ECG (P, Q, R, S, T)\nconst beatDuration = 60 / bpm;\nconst cursorRelX = (time * sweepSpeed) % screenW;\nconst cursorX = screenX + cursorRelX;\nconst centerY = screenY + screenH / 2 + vertOffset;\nconst maxAmp = (screenH * 0.35) * ampMult;\n\nfunction getECGSample(t) {\n  const p = ((t % beatDuration) + beatDuration) % beatDuration / beatDuration;\n  if (p < 0.12) {\n    return Math.sin((p / 0.12) * Math.PI) * 0.12;\n  } else if (p < 0.18) {\n    return 0;\n  } else if (p < 0.21) {\n    return -0.15 * Math.sin(((p - 0.18) / 0.03) * Math.PI);\n  } else if (p < 0.26) {\n    return 1.0 * Math.sin(((p - 0.21) / 0.05) * Math.PI);\n  } else if (p < 0.31) {\n    return -0.32 * Math.sin(((p - 0.26) / 0.05) * Math.PI);\n  } else if (p < 0.40) {\n    return 0;\n  } else if (p < 0.60) {\n    return 0.22 * Math.sin(((p - 0.40) / 0.20) * Math.PI);\n  }\n  return 0;\n}\n\n// 3. Dibujado de la estela del haz de luz (Sweep Trace)\nconst gapWidth = 40;\nconst step = 2;\nlet prevX = null;\nlet prevY = null;\n\nfor (let x = screenX; x <= screenX + screenW; x += step) {\n  const relX = x - screenX;\n  let distBehind = cursorRelX - relX;\n  if (distBehind < 0) distBehind += screenW;\n\n  if (distBehind > screenW - gapWidth) {\n    prevX = null;\n    prevY = null;\n    continue;\n  }\n\n  const timeAtX = time - (distBehind / sweepSpeed);\n  const ecgVal = getECGSample(timeAtX);\n  const y = centerY - ecgVal * maxAmp;\n\n  const alpha = Math.max(0, 1 - (distBehind / (screenW - gapWidth)));\n\n  if (prevX !== null) {\n    c.strokeStyle = lineColor;\n    c.lineWidth = lineWidth;\n    c.lineCap = 'round';\n    c.globalAlpha = alpha;\n    c.shadowColor = lineColor;\n    c.shadowBlur = 8 * alpha;\n\n    c.beginPath();\n    c.moveTo(prevX, prevY);\n    c.lineTo(x, y);\n    c.stroke();\n  }\n\n  prevX = x;\n  prevY = y;\n}\n\n// 4. Punto del cabezal principal de lectura\nconst currentECG = getECGSample(time);\nconst cursorY = centerY - currentECG * maxAmp;\n\nc.save();\nc.globalAlpha = 1.0;\nc.fillStyle = '#FFFFFF';\nc.shadowColor = lineColor;\nc.shadowBlur = 14;\nc.beginPath();\nc.arc(cursorX, cursorY, lineWidth * 1.4, 0, Math.PI * 2);\nc.fill();\nc.restore();\n\n// 5. Lectura HUD (Frecuencia en pantalla + Latido)\nc.globalAlpha = 0.9;\nc.fillStyle = lineColor;\nc.font = `bold ${fontSize}px monospace`;\nc.textAlign = 'left';\nc.textBaseline = 'top';\n\nconst drawX = screenX + textPosX;\nconst drawY = screenY + textPosY;\nconst bpmText = `HR: ${Math.round(bpm)} BPM`;\n\nc.fillText(bpmText, drawX, drawY);\n\n// Indicador visual de 'Beep' en el pico R\nconst currentPhase = ((time % beatDuration) + beatDuration) % beatDuration / beatDuration;\nif (currentPhase >= 0.21 && currentPhase <= 0.27) {\n  c.fillStyle = '#FF3344';\n  c.shadowColor = '#FF3344';\n  c.shadowBlur = 12;\n  c.font = `bold ${fontSize}px sans-serif`;\n  const textWidth = c.measureText(bpmText).width;\n  c.fillText('♥', drawX + textWidth + 8, drawY);\n}\n\nc.restore();",
+  "seed": 1,
+  "stops": [],
+  "recommended": {
+    "duration": 6,
+    "aspect": "horizontal",
+    "resolution": 1080
+  },
+  "editorSettings": {
+    "background": "#F2F5F8"
+  }
+}
