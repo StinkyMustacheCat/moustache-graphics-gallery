@@ -118,5 +118,29 @@
     "file": "contador-notificaciones-social-media.mgt.json",
     "preview": "media/contador-notificaciones-social-media.mp4",
     "license": "CC0-1.0"
+  },
+  {
+    "id": "ruleta-interactiva-premios",
+    "title": "Ruleta Interactiva de Premios",
+    "description": "Ruleta configurable para sorteos, premios y dinámicas interactivas.",
+    "file": "ruleta-interactiva-premios.mgt.json",
+    "preview": "media/ruleta-interactiva-premios.mp4",
+    "license": "MIT"
+  },
+  {
+    "id": "pokimon",
+    "title": "Pokimon",
+    "description": "Composición temática con entrada de flash inicial y estética inspirada en criaturas.",
+    "file": "pokimon.mgt.json",
+    "preview": "media/pokimon.mp4",
+    "license": "MIT"
+  },
+  {
+    "id": "epilepcia",
+    "title": "Epilepcia",
+    "description": "Efecto de texto con cambios rápidos de color y parpadeos; se recomienda precaución al visualizarlo.",
+    "file": "epilepcia.mgt.json",
+    "preview": "media/epilepcia.mp4",
+    "license": "MIT"
   }
 ]

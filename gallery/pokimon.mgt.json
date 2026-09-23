@@ -1,0 +1,167 @@
+{
+  "version": 2,
+  "name": "Pokimon",
+  "parameters": [
+    {
+      "id": "pos_x",
+      "label": "Posición X (%)",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": -50,
+      "max": 150,
+      "step": 0.5,
+      "default": 50
+    },
+    {
+      "id": "pos_y",
+      "label": "Posición Y (%)",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": -50,
+      "max": 150,
+      "step": 0.5,
+      "default": 50
+    },
+    {
+      "id": "scale",
+      "label": "Escala global",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": 0.5,
+      "max": 2,
+      "step": 0.05,
+      "default": 1.7
+    },
+    {
+      "id": "enemy_name",
+      "label": "Nombre Enemigo",
+      "type": "text",
+      "randomize": false,
+      "default": "Tu madre"
+    },
+    {
+      "id": "enemy_level",
+      "label": "Nivel Enemigo",
+      "type": "text",
+      "randomize": false,
+      "default": "Nv14"
+    },
+    {
+      "id": "enemy_hp_pct",
+      "label": "Vida Enemigo (%)",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 100
+    },
+    {
+      "id": "player_name",
+      "label": "Nombre Aliado",
+      "type": "text",
+      "randomize": false,
+      "default": "Gyarados "
+    },
+    {
+      "id": "player_level",
+      "label": "Nivel Aliado",
+      "type": "text",
+      "randomize": false,
+      "default": "Nv20"
+    },
+    {
+      "id": "player_hp_curr",
+      "label": "Vida Actual Aliado",
+      "type": "number",
+      "randomize": false,
+      "min": 0,
+      "max": 999,
+      "step": 1,
+      "default": 13
+    },
+    {
+      "id": "player_hp_max",
+      "label": "Vida Máxima Aliado",
+      "type": "number",
+      "randomize": false,
+      "min": 1,
+      "max": 999,
+      "step": 1,
+      "default": 69
+    },
+    {
+      "id": "banner_height_state",
+      "label": "Altura de Banners (2 Niveles)",
+      "type": "select",
+      "randomize": false,
+      "options": [
+        "Nivel Bajo",
+        "Nivel Alto",
+        "Alternar (Animado)"
+      ],
+      "default": "Alternar (Animado)"
+    },
+    {
+      "id": "selected_action",
+      "label": "Acción Final Seleccionada",
+      "type": "select",
+      "randomize": false,
+      "options": [
+        "LUCHAR",
+        "MOCHILA",
+        "POKÉMON",
+        "HUIR"
+      ],
+      "default": "LUCHAR"
+    },
+    {
+      "id": "action_dialog_text",
+      "label": "Texto de Pregunta",
+      "type": "text",
+      "randomize": false,
+      "default": "¿Qué hará Gyarados?"
+    },
+    {
+      "id": "enable_doubt_seq",
+      "label": "Secuencia de Duda en Botones",
+      "type": "boolean",
+      "randomize": false,
+      "default": true
+    }
+  ],
+  "html": "<div id=\"battle-container\">\n  <!-- Flash inicial -->\n  <div id=\"flash-overlay\"></div>\n\n  <!-- Escenario con plataformas de pasto vacías -->\n  <div id=\"battle-field\">\n    <div id=\"bg-gradient\"></div>\n    <!-- Plataforma Enemiga -->\n    <div id=\"enemy-platform-wrapper\">\n      <svg class=\"grass-oval\" viewBox=\"0 0 300 90\">\n        <ellipse cx=\"150\" cy=\"45\" rx=\"140\" ry=\"40\" fill=\"#78C850\" stroke=\"#388820\" stroke-width=\"6\"/>\n        <ellipse cx=\"150\" cy=\"45\" rx=\"120\" ry=\"30\" fill=\"#90E068\"/>\n        <path d=\"M 20 45 Q 150 75 280 45\" fill=\"none\" stroke=\"#F8D050\" stroke-width=\"5\"/>\n      </svg>\n    </div>\n    <!-- Plataforma Aliada -->\n    <div id=\"player-platform-wrapper\">\n      <svg class=\"grass-oval\" viewBox=\"0 0 340 100\">\n        <ellipse cx=\"170\" cy=\"50\" rx=\"160\" ry=\"45\" fill=\"#68B840\" stroke=\"#287018\" stroke-width=\"7\"/>\n        <ellipse cx=\"170\" cy=\"50\" rx=\"138\" ry=\"34\" fill=\"#80D058\"/>\n        <path d=\"M 22 50 Q 170 85 318 50\" fill=\"none\" stroke=\"#E0B838\" stroke-width=\"5\"/>\n      </svg>\n    </div>\n  </div>\n\n  <!-- Banner Enemigo (Entra por la Izquierda) -->\n  <div id=\"enemy-banner\" class=\"status-card\">\n    <div class=\"card-top\">\n      <span id=\"enemy-name\" class=\"pkmn-name\">Tangela</span>\n      <span id=\"enemy-level\" class=\"pkmn-level\">Nv14</span>\n    </div>\n    <div class=\"hp-row\">\n      <div class=\"hp-badge\">PS</div>\n      <div class=\"hp-bar-track\">\n        <div id=\"enemy-hp-fill\" class=\"hp-bar-fill\"></div>\n      </div>\n    </div>\n  </div>\n\n  <!-- Banner Aliado (Entra por la Derecha) -->\n  <div id=\"player-banner\" class=\"status-card\">\n    <div class=\"card-top\">\n      <span id=\"player-name\" class=\"pkmn-name\">Gyarados</span>\n      <span id=\"player-level\" class=\"pkmn-level\">Nv20</span>\n    </div>\n    <div class=\"hp-row\">\n      <div class=\"hp-badge\">PS</div>\n      <div class=\"hp-bar-track\">\n        <div id=\"player-hp-fill\" class=\"hp-bar-fill\"></div>\n      </div>\n    </div>\n    <div id=\"player-hp-num\" class=\"hp-numbers\">69 / 69</div>\n  </div>\n\n  <!-- Panel de Acción Bottom (Entra por Abajo) -->\n  <div id=\"action-panel\">\n    <div id=\"dialog-box\">\n      <p id=\"dialog-text\">¿Qué hará Gyarados?</p>\n    </div>\n    <div id=\"action-grid\">\n      <div id=\"btn-luchar\" class=\"action-btn btn-luchar\">LUCHAR</div>\n      <div id=\"btn-mochila\" class=\"action-btn btn-mochila\">MOCHILA</div>\n      <div id=\"btn-pokemon\" class=\"action-btn btn-pokemon\">POKÉMON</div>\n      <div id=\"btn-huir\" class=\"action-btn btn-huir\">HUIR</div>\n    </div>\n  </div>\n</div>",
+  "css": "@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');\n\n#battle-container {\n  position: absolute;\n  width: 1000px;\n  height: 650px;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  overflow: hidden;\n  font-family: 'Press Start 2P', monospace, sans-serif;\n  user-select: none;\n  background: #202020;\n  border-radius: 12px;\n  box-shadow: 0 20px 50px rgba(0,0,0,0.6);\n}\n\n#flash-overlay {\n  position: absolute;\n  inset: 0;\n  background: #ffffff;\n  z-index: 100;\n  pointer-events: none;\n  opacity: 0;\n}\n\n#battle-field {\n  position: absolute;\n  inset: 0;\n  background: linear-gradient(180deg, #58C8B0 0%, #A0E8D0 45%, #70C060 45%, #489838 100%);\n}\n\n#enemy-platform-wrapper {\n  position: absolute;\n  top: 170px;\n  right: 60px;\n  width: 380px;\n}\n\n#player-platform-wrapper {\n  position: absolute;\n  bottom: 160px;\n  left: 40px;\n  width: 420px;\n}\n\n.grass-oval {\n  width: 100%;\n  height: auto;\n  filter: drop-shadow(0px 8px 10px rgba(0,0,0,0.3));\n}\n\n/* Tarjetas de estado / Banners */\n.status-card {\n  position: absolute;\n  width: 380px;\n  background: linear-gradient(180deg, #F8F8F8 0%, #E0E0E0 100%);\n  border: 4px solid #282828;\n  border-radius: 10px 0px 14px 0px;\n  padding: 12px 16px;\n  box-shadow: 4px 6px 0px rgba(0,0,0,0.4);\n  z-index: 20;\n  transition: transform 0.1s ease;\n}\n\n#enemy-banner {\n  top: 40px;\n  left: 40px;\n}\n\n#player-banner {\n  bottom: 180px;\n  right: 40px;\n}\n\n.card-top {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  margin-bottom: 8px;\n}\n\n.pkmn-name {\n  font-size: 18px;\n  color: #202020;\n  font-weight: bold;\n}\n\n.pkmn-level {\n  font-size: 15px;\n  color: #404040;\n}\n\n.hp-row {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  background: #303030;\n  padding: 4px 8px;\n  border-radius: 6px;\n}\n\n.hp-badge {\n  color: #F8B018;\n  font-size: 12px;\n  font-weight: bold;\n}\n\n.hp-bar-track {\n  flex: 1;\n  height: 12px;\n  background: #181818;\n  border-radius: 4px;\n  overflow: hidden;\n  border: 1px solid #505050;\n}\n\n.hp-bar-fill {\n  height: 100%;\n  width: 100%;\n  background: #48D068;\n  transition: width 0.3s ease, background-color 0.3s ease;\n}\n\n.hp-numbers {\n  text-align: right;\n  font-size: 13px;\n  color: #202020;\n  margin-top: 6px;\n  font-weight: bold;\n}\n\n/* Panel Inferior de Acciones */\n#action-panel {\n  position: absolute;\n  bottom: 0;\n  left: 0;\n  width: 100%;\n  height: 140px;\n  background: #282830;\n  border-top: 5px solid #F8F8F8;\n  display: flex;\n  padding: 12px;\n  box-sizing: border-box;\n  gap: 12px;\n  z-index: 30;\n}\n\n#dialog-box {\n  flex: 1;\n  background: #F8F8F8;\n  border: 4px solid #484850;\n  border-radius: 10px;\n  padding: 16px;\n  display: flex;\n  align-items: center;\n  box-shadow: inset 0 0 0 2px #A0A0A0;\n}\n\n#dialog-text {\n  margin: 0;\n  font-size: 16px;\n  line-height: 1.5;\n  color: #181818;\n}\n\n#action-grid {\n  width: 380px;\n  display: grid;\n  grid-template-columns: 1fr 1fr;\n  grid-template-rows: 1fr 1fr;\n  gap: 8px;\n}\n\n.action-btn {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-size: 15px;\n  font-weight: bold;\n  color: #FFFFFF;\n  border-radius: 8px;\n  border: 3px solid #181818;\n  text-shadow: 2px 2px 0px rgba(0,0,0,0.5);\n  box-shadow: inset 0px 3px 0px rgba(255,255,255,0.4), 0px 4px 0px rgba(0,0,0,0.3);\n  transition: all 0.1s ease;\n}\n\n.btn-luchar { background: #E04038; }\n.btn-mochila { background: #E08828; }\n.btn-pokemon { background: #48B048; }\n.btn-huir { background: #3888E0; }\n\n.action-btn.active-selected {\n  outline: 4px solid #FFE040;\n  transform: scale(1.06);\n  box-shadow: inset 0px 3px 0px rgba(255,255,255,0.6), 0 0 14px #FFE040;\n}",
+  "render": "var p = ctx.progress;\nvar params = ctx.params;\n\nvar container = ctx.root.querySelector('#battle-container');\nvar flashOverlay = ctx.root.querySelector('#flash-overlay');\nvar enemyBanner = ctx.root.querySelector('#enemy-banner');\nvar playerBanner = ctx.root.querySelector('#player-banner');\nvar actionPanel = ctx.root.querySelector('#action-panel');\n\nvar enemyName = ctx.root.querySelector('#enemy-name');\nvar enemyLevel = ctx.root.querySelector('#enemy-level');\nvar enemyHpFill = ctx.root.querySelector('#enemy-hp-fill');\n\nvar playerName = ctx.root.querySelector('#player-name');\nvar playerLevel = ctx.root.querySelector('#player-level');\nvar playerHpFill = ctx.root.querySelector('#player-hp-fill');\nvar playerHpNum = ctx.root.querySelector('#player-hp-num');\n\nvar dialogText = ctx.root.querySelector('#dialog-text');\n\nif (!container) return;\n\n// Posicionamiento y Escala General\ncontainer.style.left = params.pos_x + '%';\ncontainer.style.top = params.pos_y + '%';\ncontainer.style.transform = 'translate(-50%, -50%) scale(' + params.scale + ')';\n\n// 1. Animación de Flash Blanco Inicial (0 a 0.12)\nvar flashOpacity = 0;\nif (p < 0.12) {\n  flashOpacity = 1 - (p / 0.12);\n}\nflashOverlay.style.opacity = flashOpacity;\n\n// 2. Animaciones de Entrada (Slide In)\n// Banner Enemigo desde la Izquierda (0.05 a 0.3)\nvar enemyP = Math.min(1, Math.max(0, (p - 0.05) / 0.25));\nvar enemyEase = 1 - Math.pow(1 - enemyP, 3);\nvar enemyXOffset = (1 - enemyEase) * -500;\n\n// Banner Aliado desde la Derecha (0.10 a 0.35)\nvar playerP = Math.min(1, Math.max(0, (p - 0.10) / 0.25));\nvar playerEase = 1 - Math.pow(1 - playerP, 3);\nvar playerXOffset = (1 - playerEase) * 500;\n\n// Panel de Acciones desde Abajo (0.15 a 0.40)\nvar actionP = Math.min(1, Math.max(0, (p - 0.15) / 0.25));\nvar actionEase = 1 - Math.pow(1 - actionP, 3);\nvar actionYOffset = (1 - actionEase) * 200;\n\nactionPanel.style.transform = 'translateY(' + actionYOffset + 'px)';\n\n// 3. Modificador de Altura de los Banners (Subir/Bajar en 2 Alturas)\nvar verticalHeightOffset = 0;\nif (params.banner_height_state === \"Nivel Alto\") {\n  verticalHeightOffset = -20;\n} else if (params.banner_height_state === \"Alternar (Animado)\") {\n  // Alterna tajantemente entre 0px y -20px (2 alturas discretas)\n  var step = Math.floor(p * 8) % 2;\n  verticalHeightOffset = (step === 1) ? -20 : 0;\n}\n\nenemyBanner.style.transform = 'translateX(' + enemyXOffset + 'px) translateY(' + verticalHeightOffset + 'px)';\nplayerBanner.style.transform = 'translateX(' + playerXOffset + 'px) translateY(' + verticalHeightOffset + 'px)';\n\n// 4. Actualización de Textos e Información de Banners\nif (enemyName) enemyName.textContent = params.enemy_name || '';\nif (enemyLevel) enemyLevel.textContent = params.enemy_level || '';\nif (playerName) playerName.textContent = params.player_name || '';\nif (playerLevel) playerLevel.textContent = params.player_level || '';\n\n// Barras de Vida y Coloración\nvar enemyHp = Math.min(100, Math.max(0, params.enemy_hp_pct));\nif (enemyHpFill) {\n  enemyHpFill.style.width = enemyHp + '%';\n  enemyHpFill.style.backgroundColor = (enemyHp < 20) ? '#E04038' : (enemyHp < 50) ? '#F8B018' : '#48D068';\n}\n\nvar maxHp = Math.max(1, params.player_hp_max || 1);\nvar currHp = Math.min(maxHp, Math.max(0, params.player_hp_curr || 0));\nvar playerHpPct = (currHp / maxHp) * 100;\n\nif (playerHpFill) {\n  playerHpFill.style.width = playerHpPct + '%';\n  playerHpFill.style.backgroundColor = (playerHpPct < 20) ? '#E04038' : (playerHpPct < 50) ? '#F8B018' : '#48D068';\n}\n\nif (playerHpNum) {\n  playerHpNum.textContent = currHp + ' / ' + maxHp;\n}\n\n// 5. Texto del Cuadro de Diálogo (Se mantiene fijo)\nif (dialogText) {\n  dialogText.textContent = params.action_dialog_text || '';\n}\n\n// 6. Selección de Acción con Secuencia de Duda entre Botones\nvar currentHighlighted = params.selected_action;\n\nif (params.enable_doubt_seq && p >= 0.30 && p < 0.65) {\n  // Cambia rápidamente entre 3 a 4 botones antes de quedar en la opción elegida\n  var doubtSequence = [\"MOCHILA\", \"POKÉMON\", \"HUIR\", \"LUCHAR\"];\n  var doubtP = (p - 0.30) / (0.65 - 0.30);\n  var doubtIndex = Math.floor(doubtP * 4) % 4;\n  currentHighlighted = doubtSequence[doubtIndex];\n} else if (params.enable_doubt_seq && p < 0.30) {\n  // Mientras el panel entra por abajo, resalta el primer botón por defecto\n  currentHighlighted = \"LUCHAR\";\n} else {\n  // Pasado el tiempo de duda, fija la opción seleccionada por el usuario en el parámetro\n  currentHighlighted = params.selected_action;\n}\n\nvar btns = {\n  \"LUCHAR\": ctx.root.querySelector('#btn-luchar'),\n  \"MOCHILA\": ctx.root.querySelector('#btn-mochila'),\n  \"POKÉMON\": ctx.root.querySelector('#btn-pokemon'),\n  \"HUIR\": ctx.root.querySelector('#btn-huir')\n};\n\nObject.keys(btns).forEach(function(key) {\n  if (btns[key]) {\n    if (key === currentHighlighted) {\n      btns[key].classList.add('active-selected');\n    } else {\n      btns[key].classList.remove('active-selected');\n    }\n  }\n});",
+  "seed": 101,
+  "stops": [
+    {
+      "id": "stop1",
+      "label": "Interfaz Completa y Selección",
+      "element": "#battle-container",
+      "x": "pos_x",
+      "y": "pos_y",
+      "at": 0.5
+    }
+  ],
+  "recommended": {
+    "duration": 6,
+    "aspect": "horizontal",
+    "resolution": 1080
+  },
+  "metadata": {
+    "id": "pokemon-battle-ui",
+    "description": "Recreación de interfaz de batalla retro estilo Pokémon con banners animados, barra de vida configurable, plataformas de pasto vacías y secuencia de duda en botones de acción.",
+    "category": "Lower Thirds",
+    "author": "MGT Community",
+    "license": "MIT",
+    "templateVersion": "1.1.0"
+  },
+  "editorSettings": {
+    "background": "#38a088"
+  }
+}

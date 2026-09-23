@@ -1,0 +1,166 @@
+{
+  "version": 2,
+  "name": "Epilepcia",
+  "parameters": [
+    {
+      "id": "pos_x",
+      "label": "Posición X (%)",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": -50,
+      "max": 150,
+      "step": 0.5,
+      "default": 50
+    },
+    {
+      "id": "pos_y",
+      "label": "Posición Y (%)",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": -50,
+      "max": 150,
+      "step": 0.5,
+      "default": 50
+    },
+    {
+      "id": "text_content",
+      "label": "Texto",
+      "type": "text",
+      "randomize": false,
+      "default": "EPILEPSIA"
+    },
+    {
+      "id": "font_family",
+      "label": "Fuente del Sistema",
+      "type": "select",
+      "randomize": false,
+      "options": [
+        "Impact",
+        "Arial Black",
+        "Trebuchet MS",
+        "Courier New",
+        "Georgia",
+        "Comic Sans MS",
+        "Verdana"
+      ],
+      "default": "Impact"
+    },
+    {
+      "id": "font_size",
+      "label": "Tamaño de Fuente (px)",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": 20,
+      "max": 200,
+      "step": 1,
+      "default": 200
+    },
+    {
+      "id": "flash_mode",
+      "label": "Modo de Destello de Color",
+      "type": "select",
+      "randomize": false,
+      "options": [
+        "Texto",
+        "Fondo",
+        "Ambos (Alternado)"
+      ],
+      "default": "Fondo"
+    },
+    {
+      "id": "static_bg_color",
+      "label": "Color de Fondo Fijo",
+      "type": "color",
+      "randomize": false,
+      "default": "#0d0d0d"
+    },
+    {
+      "id": "motion_blur_amount",
+      "label": "Desenfoque Máximo (px)",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "id": "flash_speed",
+      "label": "Velocidad de Destello",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": 5,
+      "max": 60,
+      "step": 1,
+      "default": 60
+    },
+    {
+      "id": "aberration_max_offset",
+      "label": "Distancia Máxima capas RGB (px)",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": 5,
+      "max": 100,
+      "step": 1,
+      "default": 35
+    },
+    {
+      "id": "shake_intensity",
+      "label": "Intensidad de Sacudida (px)",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": 0,
+      "max": 80,
+      "step": 1,
+      "default": 25
+    },
+    {
+      "id": "max_expansion_scale",
+      "label": "Escala Máxima de Expansión",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": 1,
+      "max": 3,
+      "step": 0.1,
+      "default": 1.6
+    }
+  ],
+  "html": "<div id=\"glitch-wrapper\">\n  <div id=\"glitch-container\">\n    <!-- Capa Roja (Cromática) -->\n    <div id=\"layer-red\" class=\"glitch-layer\"></div>\n    <!-- Capa Cyan (Cromática) -->\n    <div id=\"layer-cyan\" class=\"glitch-layer\"></div>\n    <!-- Capa Verde/Amarilla (Cromática Extra) -->\n    <div id=\"layer-yellow\" class=\"glitch-layer\"></div>\n    <!-- Capa Principal -->\n    <div id=\"layer-main\" class=\"glitch-layer\"></div>\n  </div>\n</div>",
+  "css": "#glitch-wrapper {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  overflow: hidden;\n  box-sizing: border-box;\n}\n\n#glitch-container {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  pointer-events: none;\n  user-select: none;\n  white-space: nowrap;\n}\n\n.glitch-layer {\n  position: absolute;\n  font-weight: 900;\n  text-transform: uppercase;\n  letter-spacing: 4px;\n  text-align: center;\n  transition: none;\n}\n\n#layer-main {\n  color: #FFFFFF;\n  z-index: 4;\n}\n\n#layer-red {\n  color: #FF0055;\n  mix-blend-mode: screen;\n  z-index: 3;\n  opacity: 0.85;\n}\n\n#layer-cyan {\n  color: #00E5FF;\n  mix-blend-mode: screen;\n  z-index: 2;\n  opacity: 0.85;\n}\n\n#layer-yellow {\n  color: #FFE600;\n  mix-blend-mode: screen;\n  z-index: 1;\n  opacity: 0.7;\n}",
+  "render": "var p = ctx.progress;\nvar params = ctx.params;\n\nvar wrapper = ctx.root.querySelector('#glitch-wrapper');\nvar container = ctx.root.querySelector('#glitch-container');\nvar layerMain = ctx.root.querySelector('#layer-main');\nvar layerRed = ctx.root.querySelector('#layer-red');\nvar layerCyan = ctx.root.querySelector('#layer-cyan');\nvar layerYellow = ctx.root.querySelector('#layer-yellow');\n\nif (!container || !wrapper) return;\n\n// 1. Posicionamiento Global\ncontainer.style.left = params.pos_x + '%';\ncontainer.style.top = params.pos_y + '%';\n\nvar text = params.text_content || '';\nvar font = params.font_family || 'Impact, sans-serif';\nvar size = (params.font_size || 80) + 'px';\n\nvar layers = [layerMain, layerRed, layerCyan, layerYellow];\nlayers.forEach(function(l) {\n  if (l) {\n    l.textContent = text;\n    l.style.fontFamily = font + ', sans-serif';\n    l.style.fontSize = size;\n  }\n});\n\n// 2. Expansión y Sacudida (Shake)\nvar startScale = 1.0;\nvar endScale = params.max_expansion_scale || 1.6;\nvar currentScale = startScale + (endScale - startScale) * p;\n\nvar shakeAmp = params.shake_intensity || 25;\nvar shakeX = (Math.sin(p * 143) + Math.cos(p * 293)) * shakeAmp * (0.4 + p * 0.6);\nvar shakeY = (Math.cos(p * 179) + Math.sin(p * 311)) * shakeAmp * (0.4 + p * 0.6);\nvar shakeRot = Math.sin(p * 97) * (shakeAmp * 0.25);\n\ncontainer.style.transform = 'translate(-50%, -50%) scale(' + currentScale + ') translate(' + shakeX + 'px, ' + shakeY + 'px) rotate(' + shakeRot + 'deg)';\n\n// 3. Simulación de Motion Blur por la sacudida\nvar maxBlur = params.motion_blur_amount || 8;\nvar currentBlur = (Math.abs(shakeX) + Math.abs(shakeY)) / (shakeAmp * 2) * maxBlur * p;\ncontainer.style.filter = 'blur(' + currentBlur.toFixed(2) + 'px)';\n\n// 4. Aberración Cromática (Capas RGB se separan)\nvar maxOffset = params.aberration_max_offset || 35;\nvar currentOffset = maxOffset * Math.pow(p, 1.2);\n\nvar redX = (Math.sin(p * 210) * 0.3 + 1) * currentOffset;\nvar redY = (Math.cos(p * 180) * 0.3 - 0.5) * currentOffset;\n\nvar cyanX = -(Math.cos(p * 250) * 0.3 + 1) * currentOffset;\nvar cyanY = -(Math.sin(p * 190) * 0.3 - 0.5) * currentOffset;\n\nvar yellowX = (Math.sin(p * 320)) * (currentOffset * 0.6);\nvar yellowY = (Math.cos(p * 340) + 1) * (currentOffset * 0.6);\n\nif (layerRed) layerRed.style.transform = 'translate(' + redX + 'px, ' + redY + 'px)';\nif (layerCyan) layerCyan.style.transform = 'translate(' + cyanX + 'px, ' + cyanY + 'px)';\nif (layerYellow) layerYellow.style.transform = 'translate(' + yellowX + 'px, ' + yellowY + 'px)';\n\n// 5. Paleta de Colores Estroboscópicos\nvar flashSpeed = params.flash_speed || 24;\nvar colorStep = Math.floor(p * flashSpeed);\nvar palette = [\n  '#FFFFFF', // Blanco\n  '#FF0055', // Magenta\n  '#00E5FF', // Cyan\n  '#FFE600', // Amarillo\n  '#00FF66', // Verde Neón\n  '#FF3300'  // Naranja\n];\nvar currentColor = palette[colorStep % palette.length];\nvar altColor = palette[(colorStep + 3) % palette.length];\n\n// 6. Lógica de Modos de Color (Texto vs Fondo)\nvar mode = params.flash_mode || 'Texto';\nvar staticBg = params.static_bg_color || '#0d0d0d';\n\nif (mode === 'Texto') {\n  wrapper.style.backgroundColor = staticBg;\n  if (layerMain) layerMain.style.color = currentColor;\n} else if (mode === 'Fondo') {\n  wrapper.style.backgroundColor = currentColor;\n  if (layerMain) layerMain.style.color = '#FFFFFF';\n} else if (mode === 'Ambos (Alternado)') {\n  wrapper.style.backgroundColor = currentColor;\n  if (layerMain) layerMain.style.color = altColor;\n}",
+  "seed": 203,
+  "stops": [
+    {
+      "id": "stop1",
+      "label": "Efecto Máximo Glitch",
+      "element": "#glitch-wrapper",
+      "x": "pos_x",
+      "y": "pos_y",
+      "at": 0.5
+    }
+  ],
+  "recommended": {
+    "duration": 5,
+    "aspect": "horizontal",
+    "resolution": 1080
+  },
+  "metadata": {
+    "id": "text-chromatic-glitch-blur",
+    "description": "Texto e impacto estroboscópico con simulación de desenfoque por movimiento (blur), aberración cromática expansiva y modos de color para texto/fondo.",
+    "category": "Title",
+    "author": "MGT Community",
+    "license": "MIT",
+    "templateVersion": "1.1.0"
+  },
+  "editorSettings": {
+    "background": "#0d0d0d"
+  }
+}
