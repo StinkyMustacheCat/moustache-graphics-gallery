@@ -1,0 +1,107 @@
+{
+  "version": 2,
+  "name": "Contador de Suscriptores YouTube",
+  "parameters": [
+    {
+      "id": "button_text",
+      "label": "Texto del Botón",
+      "type": "text",
+      "randomize": false,
+      "default": "Suscribete"
+    },
+    {
+      "id": "target_count",
+      "label": "Cifra Objetivo de Suscriptores",
+      "type": "number",
+      "randomize": false,
+      "min": 1,
+      "max": 100000000,
+      "step": 100000,
+      "default": 1000000
+    },
+    {
+      "id": "start_count",
+      "label": "Cifra Inicial",
+      "type": "number",
+      "randomize": false,
+      "min": 0,
+      "max": 99000000,
+      "step": 100000,
+      "default": 1
+    },
+    {
+      "id": "card_scale",
+      "label": "Tamaño / Escala del Contador",
+      "type": "number",
+      "randomize": false,
+      "min": 50,
+      "max": 200,
+      "step": 5,
+      "default": 200
+    },
+    {
+      "id": "text_color",
+      "label": "Color de Números y Texto",
+      "type": "color",
+      "randomize": false,
+      "default": "#FFFFFF"
+    },
+    {
+      "id": "btn_bg_color",
+      "label": "Color Fondo del Botón",
+      "type": "color",
+      "randomize": false,
+      "default": "#CC0000"
+    },
+    {
+      "id": "btn_text_color",
+      "label": "Color Texto del Botón",
+      "type": "color",
+      "randomize": false,
+      "default": "#FFFFFF"
+    },
+    {
+      "id": "bg_color",
+      "label": "Color de Fondo",
+      "type": "color",
+      "randomize": false,
+      "default": "#0F0F0F"
+    },
+    {
+      "id": "acceleration",
+      "label": "Aceleración de Velocidad",
+      "type": "select",
+      "randomize": false,
+      "options": [
+        "Suave",
+        "Exponencial Rápida",
+        "Lineal"
+      ],
+      "default": "Suave"
+    },
+    {
+      "id": "blur_effect",
+      "label": "Desenfoque de Movimiento",
+      "type": "select",
+      "randomize": false,
+      "options": [
+        "Sí",
+        "No"
+      ],
+      "default": "No"
+    }
+  ],
+  "html": "<canvas id=\"yt-canvas\"></canvas>",
+  "css": "#yt-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }",
+  "render": "const { root, params, progress, time, width, height } = ctx;\nconst canvas = root.querySelector('#yt-canvas');\nif (!canvas) return;\n\nif (canvas.width !== width || canvas.height !== height) {\n  canvas.width = width;\n  canvas.height = height;\n}\n\nconst c = canvas.getContext('2d');\nconst btnText = params.button_text || \"SUSCRÍBETE\";\nconst targetCount = params.target_count || 10000000;\nconst startCount = params.start_count || 0;\nconst scale = (params.card_scale || 100) / 100;\nconst textColor = params.text_color || \"#FFFFFF\";\nconst btnBgColor = params.btn_bg_color || \"#CC0000\";\nconst btnTextColor = params.btn_text_color || \"#FFFFFF\";\nconst bgColor = params.bg_color || \"#0F0F0F\";\nconst accelType = params.acceleration || \"Exponencial Rápida\";\nconst useBlur = (params.blur_effect || \"Sí\") === \"Sí\";\n\n// Limpiar fondo\nc.fillStyle = bgColor;\nc.fillRect(0, 0, width, height);\n\n// Cálculo de progreso no lineal (aceleración progresiva)\nlet rawProgress = Math.min(Math.max(progress, 0), 1);\nlet easeProgress = rawProgress;\nlet speedFactor = 0;\n\nif (accelType === \"Exponencial Rápida\") {\n  easeProgress = Math.pow(rawProgress, 3);\n  speedFactor = 3 * Math.pow(rawProgress, 2);\n} else if (accelType === \"Suave\") {\n  easeProgress = Math.pow(rawProgress, 2);\n  speedFactor = 2 * rawProgress;\n} else {\n  easeProgress = rawProgress;\n  speedFactor = 1;\n}\n\nconst currentNum = Math.floor(startCount + (targetCount - startCount) * easeProgress);\n\n// Formatear número con separadores de miles\nconst formattedNum = currentNum.toLocaleString('en-US');\n\nc.save();\nconst cx = width / 2;\nconst cy = height / 2;\n\n// Dibujar Tarjeta/Contenedor estilo YouTube\nconst cardWidth = 520 * scale;\nconst cardHeight = 210 * scale;\nconst cardRadius = 16 * scale;\n\nc.fillStyle = \"rgba(255, 255, 255, 0.05)\";\nc.beginPath();\nif (c.roundRect) {\n  c.roundRect(cx - cardWidth / 2, cy - cardHeight / 2, cardWidth, cardHeight, cardRadius);\n} else {\n  c.rect(cx - cardWidth / 2, cy - cardHeight / 2, cardWidth, cardHeight);\n}\nc.fill();\nc.strokeStyle = \"rgba(255, 255, 255, 0.12)\";\nc.lineWidth = 1.5 * scale;\nc.stroke();\n\n// Etiqueta superior\nc.font = `600 ${14 * scale}px system-ui, -apple-system, sans-serif`;\nc.fillStyle = textColor;\nc.globalAlpha = 0.6;\nc.textAlign = \"center\";\nc.fillText(\"SUSCRIPTORES\", cx, cy - cardHeight / 2 + 35 * scale);\nc.globalAlpha = 1.0;\n\n// Calcular desfase de velocidad para el desenfoque vertical\nconst blurAmount = useBlur ? Math.min(14, speedFactor * 9) : 0;\n\nc.save();\nc.textAlign = \"center\";\nc.textBaseline = \"middle\";\nc.font = `700 ${48 * scale}px system-ui, -apple-system, sans-serif`;\n\nif (blurAmount > 0.5) {\n  // Renderizado multi-pass con atenuación alpha para simular Motion Blur\n  const passes = 5;\n  for (let i = -passes; i <= passes; i++) {\n    const offsetY = (i / passes) * blurAmount * scale;\n    const alpha = (1 - Math.abs(i) / (passes + 1)) * 0.25;\n    c.fillStyle = textColor;\n    c.globalAlpha = alpha;\n    c.fillText(formattedNum, cx, cy - 8 * scale + offsetY);\n  }\n} else {\n  c.fillStyle = textColor;\n  c.fillText(formattedNum, cx, cy - 8 * scale);\n}\nc.restore();\n\n// Dibujar Botón\nconst btnWidth = 190 * scale;\nconst btnHeight = 44 * scale;\nconst btnX = cx - btnWidth / 2;\nconst btnY = cy + cardHeight / 2 - 58 * scale;\nconst btnRadius = 22 * scale;\n\nc.fillStyle = btnBgColor;\nc.beginPath();\nif (c.roundRect) {\n  c.roundRect(btnX, btnY, btnWidth, btnHeight, btnRadius);\n} else {\n  c.rect(btnX, btnY, btnWidth, btnHeight);\n}\nc.fill();\n\n// Texto del botón\nc.font = `700 ${15 * scale}px system-ui, -apple-system, sans-serif`;\nc.fillStyle = btnTextColor;\nc.textAlign = \"center\";\nc.textBaseline = \"middle\";\nc.fillText(btnText, cx, btnY + btnHeight / 2);\n\nc.restore();",
+  "seed": 1,
+  "stops": [],
+  "recommended": {
+    "duration": 6,
+    "aspect": "horizontal",
+    "resolution": 1080
+  },
+  "editorSettings": {
+    "background": "#F2F5F8"
+  }
+}

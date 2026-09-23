@@ -1,0 +1,142 @@
+{
+  "version": 2,
+  "name": "Tablero de Teorías y Conspiración Detective",
+  "parameters": [
+    {
+      "id": "board_style",
+      "label": "Estilo de Pizarra (1:Corcho, 2:Madera Oscura, 3:Pizarra)",
+      "type": "number",
+      "randomize": false,
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "id": "string_color",
+      "label": "Color del Hilo Rojo",
+      "type": "color",
+      "randomize": false,
+      "default": "#FF2233"
+    },
+    {
+      "id": "string_tension",
+      "label": "Caída / Caída de Cuerdas",
+      "type": "number",
+      "randomize": false,
+      "min": 0,
+      "max": 1,
+      "step": 0.05,
+      "default": 1
+    },
+    {
+      "id": "string_density",
+      "label": "Red de Conexión (1:Solo Centro, 2:Malla Completa)",
+      "type": "number",
+      "randomize": false,
+      "min": 1,
+      "max": 2,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "id": "pulse_speed",
+      "label": "Velocidad Pulso en Hilos",
+      "type": "number",
+      "randomize": false,
+      "min": 0.2,
+      "max": 3,
+      "step": 0.1,
+      "default": 1
+    },
+    {
+      "id": "show_pulse",
+      "label": "Mostrar Señal Viajera en Hilos",
+      "type": "boolean",
+      "randomize": false,
+      "default": true
+    },
+    {
+      "id": "central_label",
+      "label": "Etiqueta Sospechoso Central",
+      "type": "text",
+      "randomize": false,
+      "default": "SOSPECHOSO X"
+    },
+    {
+      "id": "question_color",
+      "label": "Color Signo ?",
+      "type": "color",
+      "randomize": false,
+      "default": "#ff0000"
+    },
+    {
+      "id": "flashlight_mode",
+      "label": "Efecto Luz / Linterna Movil",
+      "type": "boolean",
+      "randomize": false,
+      "default": true
+    },
+    {
+      "id": "dust_particles",
+      "label": "Polvo Ambiental Flotante",
+      "type": "boolean",
+      "randomize": false,
+      "default": true
+    },
+    {
+      "id": "card_count",
+      "label": "Cantidad de Pistas Alrededor",
+      "type": "number",
+      "randomize": false,
+      "min": 4,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "id": "card_bg",
+      "label": "Color de Tarjetas Nota",
+      "type": "color",
+      "randomize": false,
+      "default": "#F4E8C1"
+    },
+    {
+      "id": "pin_color",
+      "label": "Color de Chinches / Pines",
+      "type": "color",
+      "randomize": false,
+      "default": "#E60000"
+    },
+    {
+      "id": "glow_intensity",
+      "label": "Intensidad Brillo Neón / Neón Center",
+      "type": "number",
+      "randomize": false,
+      "min": 0.1,
+      "max": 1,
+      "step": 0.1,
+      "default": 1
+    },
+    {
+      "id": "font_family",
+      "label": "Tipo de Fuente",
+      "type": "text",
+      "randomize": false,
+      "default": "Courier New, monospace"
+    }
+  ],
+  "html": "<canvas id=\"board-canvas\"></canvas>",
+  "css": "#board-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }",
+  "render": "const { root, params, time, width, height } = ctx;\nconst canvas = root.querySelector('#board-canvas');\nif (!canvas) return;\n\nif (canvas.width !== width || canvas.height !== height) {\n  canvas.width = width;\n  canvas.height = height;\n}\n\nconst c = canvas.getContext('2d');\n\nconst boardStyle = params.board_style || 1;\nconst stringColor = params.string_color || '#FF2233';\nconst stringTension = params.string_tension !== undefined ? params.string_tension : 0.4;\nconst stringDensity = params.string_density || 2;\nconst pulseSpeed = params.pulse_speed || 1.0;\nconst showPulse = params.show_pulse !== false;\nconst centralLabel = params.central_label !== undefined ? params.central_label : 'SOSPECHOSO X';\nconst questionColor = params.question_color || '#FFD700';\nconst flashlightMode = params.flashlight_mode !== false;\nconst dustParticles = params.dust_particles !== false;\nconst cardCount = params.card_count || 6;\nconst cardBg = params.card_bg || '#F4E8C1';\nconst pinColor = params.pin_color || '#E60000';\nconst glowIntensity = params.glow_intensity !== undefined ? params.glow_intensity : 0.8;\nconst fontFamily = params.font_family || 'Courier New, monospace';\n\n// 1. DIBUJAR FONDO SEGÚN ESTILO\nc.save();\nif (boardStyle === 1) {\n  c.fillStyle = '#3D2817';\n  c.fillRect(0, 0, width, height);\n  c.fillStyle = 'rgba(0, 0, 0, 0.15)';\n  for (let x = 0; x < width; x += 8) {\n    for (let y = 0; y < height; y += 8) {\n      if ((x + y) % 16 === 0) c.fillRect(x, y, 4, 4);\n    }\n  }\n} else if (boardStyle === 2) {\n  c.fillStyle = '#1A110C';\n  c.fillRect(0, 0, width, height);\n  c.fillStyle = '#261912';\n  const plankW = width / 8;\n  for (let i = 0; i < 8; i += 2) {\n    c.fillRect(i * plankW, 0, plankW, height);\n  }\n} else {\n  c.fillStyle = '#181C1E';\n  c.fillRect(0, 0, width, height);\n}\nc.restore();\n\nconst cx = width / 2;\nconst cy = height / 2;\nconst centerW = 130;\nconst centerH = 175;\nconst centerPinY = cy - centerH / 2 + 12;\n\n// 2. CALCULAR POSICIONES DE TARJETAS ALREDEDOR\nconst outerCards = [];\nconst radiusX = Math.min(width, height) * 0.36;\nconst radiusY = Math.min(width, height) * 0.30;\n\nfor (let i = 0; i < cardCount; i++) {\n  const angle = (i / cardCount) * Math.PI * 2 - Math.PI / 2;\n  const floatOffset = Math.sin(time * 1.5 + i) * 3;\n  const x = cx + Math.cos(angle) * radiusX;\n  const y = cy + Math.sin(angle) * radiusY + floatOffset;\n  const tilt = Math.sin(i * 12.3) * 0.2;\n  const pinX = x;\n  const pinY = y - 38;\n  outerCards.push({ x, y, pinX, pinY, tilt, id: i });\n}\n\n// Función auxiliar para dibujar curvas bezier cuadráticas (hilos)\nfunction drawThread(p1x, p1y, p2x, p2y, offsetIdx) {\n  const mx = (p1x + p2x) / 2;\n  const my = (p1y + p2y) / 2 + stringTension * 65;\n  \n  c.save();\n  c.strokeStyle = 'rgba(0,0,0,0.4)';\n  c.lineWidth = 3;\n  c.beginPath();\n  c.moveTo(p1x, p1y + 3);\n  c.quadraticCurveTo(mx, my + 3, p2x, p2y + 3);\n  c.stroke();\n  \n  c.strokeStyle = stringColor;\n  c.lineWidth = 2;\n  c.beginPath();\n  c.moveTo(p1x, p1y);\n  c.quadraticCurveTo(mx, my, p2x, p2y);\n  c.stroke();\n  c.restore();\n  \n  if (showPulse) {\n    const progress = ((time * pulseSpeed * 0.5) + offsetIdx * 0.2) % 1.0;\n    const inv = 1 - progress;\n    const px = inv * inv * p1x + 2 * inv * progress * mx + progress * progress * p2x;\n    const py = inv * inv * p1y + 2 * inv * progress * my + progress * progress * p2y;\n    \n    c.save();\n    c.fillStyle = '#FFFFFF';\n    c.shadowColor = stringColor;\n    c.shadowBlur = 10 * glowIntensity;\n    c.beginPath();\n    c.arc(px, py, 3.5, 0, Math.PI * 2);\n    c.fill();\n    c.restore();\n  }\n}\n\n// 3. DIBUJAR HILOS ROJOS ENTRE PISTAS\nfor (let i = 0; i < outerCards.length; i++) {\n  const card = outerCards[i];\n  drawThread(card.pinX, card.pinY, cx, centerPinY, i);\n  \n  if (stringDensity === 2) {\n    const nextCard = outerCards[(i + 1) % outerCards.length];\n    drawThread(card.pinX, card.pinY, nextCard.pinX, nextCard.pinY, i + 10);\n  }\n}\n\n// 4. DIBUJAR TARJETAS PERIFÉRICAS (POLAROIDS / NOTAS)\nfor (let i = 0; i < outerCards.length; i++) {\n  const card = outerCards[i];\n  c.save();\n  c.translate(card.x, card.y);\n  c.rotate(card.tilt);\n  \n  c.fillStyle = 'rgba(0, 0, 0, 0.35)';\n  c.fillRect(-42, -42, 90, 100);\n  \n  c.fillStyle = cardBg;\n  c.fillRect(-45, -45, 90, 100);\n  \n  c.fillStyle = '#1A1A1A';\n  c.fillRect(-37, -37, 74, 60);\n  \n  c.fillStyle = 'rgba(255, 255, 255, 0.08)';\n  c.fillRect(-37, -37, 74, 30);\n  \n  c.fillStyle = '#3A3A3A';\n  c.fillRect(-30, 28, 40, 4);\n  c.fillRect(-30, 36, 60, 4);\n  c.restore();\n  \n  // Chinche\n  c.save();\n  c.fillStyle = pinColor;\n  c.shadowColor = '#000000';\n  c.shadowBlur = 4;\n  c.beginPath();\n  c.arc(card.pinX, card.pinY, 6, 0, Math.PI * 2);\n  c.fill();\n  c.restore();\n}\n\n// 5. DIBUJAR TARJETA CENTRAL DE LA SILUETA (SOSPECHOSO Principal)\nc.save();\nc.translate(cx, cy);\n\nc.fillStyle = 'rgba(0, 0, 0, 0.5)';\nc.fillRect(-centerW / 2 + 5, -centerH / 2 + 5, centerW, centerH);\n\nc.fillStyle = '#111318';\nc.strokeStyle = questionColor;\nc.lineWidth = 2;\nc.beginPath();\nc.roundRect(-centerW / 2, -centerH / 2, centerW, centerH, 6);\nc.fill();\nc.stroke();\n\n// Silueta humana en sombras\nc.fillStyle = '#07080A';\nc.beginPath();\nc.arc(0, -20, 28, 0, Math.PI * 2);\nc.fill();\n\nc.beginPath();\nc.ellipse(0, 45, 48, 38, 0, Math.PI, 0, true);\nc.fill();\n\n// Signo de interrogación vibrando / latiendo\nconst pulseScale = 1 + Math.sin(time * 4) * 0.08;\nconst pulseGlow = (12 + Math.sin(time * 4) * 8) * glowIntensity;\n\nc.save();\nc.scale(pulseScale, pulseScale);\nc.fillStyle = questionColor;\nc.shadowColor = questionColor;\nc.shadowBlur = pulseGlow;\nc.font = 'bold 54px ' + fontFamily;\nc.textAlign = 'center';\nc.textBaseline = 'middle';\nc.fillText('?', 0, -8);\nc.restore();\n\nif (centralLabel.trim().length > 0) {\n  c.fillStyle = '#FFFFFF';\n  c.font = 'bold 12px ' + fontFamily;\n  c.textAlign = 'center';\n  c.textBaseline = 'bottom';\n  c.fillText(centralLabel, 0, centerH / 2 - 12);\n}\nc.restore();\n\n// Chinche central\nc.save();\nc.fillStyle = pinColor;\nc.shadowColor = '#000000';\nc.shadowBlur = 5;\nc.beginPath();\nc.arc(cx, centerPinY, 8, 0, Math.PI * 2);\nc.fill();\nc.restore();\n\n// 6. POLVO AMBIENTAL SUSPENDIDO\nif (dustParticles) {\n  c.save();\n  c.fillStyle = '#FFFFFF';\n  for (let p = 0; p < 25; p++) {\n    const px = (Math.sin(p * 99 + time * 0.2) * 0.5 + 0.5) * width;\n    const py = (Math.cos(p * 33 + time * 0.15) * 0.5 + 0.5) * height;\n    c.globalAlpha = 0.15 + Math.sin(time + p) * 0.1;\n    c.fillRect(px, py, 2, 2);\n  }\n  c.restore();\n}\n\n// 7. EFECTO LINTERNA / LUZ DE DETECTIVE\nif (flashlightMode) {\n  c.save();\n  const lx = cx + Math.sin(time * 0.8) * (width * 0.22);\n  const ly = cy + Math.cos(time * 0.6) * (height * 0.18);\n  \n  const lightGrad = c.createRadialGradient(lx, ly, 80, lx, ly, Math.max(width, height) * 0.65);\n  lightGrad.addColorStop(0, 'rgba(0,0,0,0)');\n  lightGrad.addColorStop(0.5, 'rgba(0,0,0,0.3)');\n  lightGrad.addColorStop(1, 'rgba(0,0,0,0.82)');\n  \n  c.fillStyle = lightGrad;\n  c.fillRect(0, 0, width, height);\n  c.restore();\n}",
+  "seed": 1,
+  "stops": [],
+  "recommended": {
+    "duration": 3,
+    "aspect": "horizontal",
+    "resolution": 1080
+  },
+  "editorSettings": {
+    "background": "#172326"
+  }
+}

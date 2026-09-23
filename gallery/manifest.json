@@ -94,5 +94,29 @@
     "file": "reloj-paletas-flip-clock.mgt.json",
     "preview": "media/reloj-paletas-flip-clock.mp4",
     "license": "CC0-1.0"
+  },
+  {
+    "id": "tablero-teorias-conspiracion",
+    "title": "Tablero de Teorías y Conspiración Detective",
+    "description": "Tablero de investigación con pistas, conexiones y estética de detective.",
+    "file": "tablero-teorias-conspiracion.mgt.json",
+    "preview": "media/tablero-teorias-conspiracion.mp4",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "los-sims-sons",
+    "title": "Los Sims-sons",
+    "description": "Composición inspirada en una presentación de vida simulada con estilo de interfaz lúdica.",
+    "file": "los-sims-sons.mgt.json",
+    "preview": "media/los-sims-sons.mp4",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "contador-notificaciones-social-media",
+    "title": "Contador de Notificaciones Social Media",
+    "description": "Contador animado para notificaciones y métricas de redes sociales.",
+    "file": "contador-notificaciones-social-media.mgt.json",
+    "preview": "media/contador-notificaciones-social-media.mp4",
+    "license": "CC0-1.0"
   }
 ]
