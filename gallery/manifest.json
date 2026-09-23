@@ -1,0 +1,10 @@
+[
+  {
+    "id": "desencriptador-hacker-matrix",
+    "title": "Efecto Desencriptador Hacker Matrix",
+    "description": "Efecto de texto estilo Matrix con lluvia digital, caracteres cambiantes y líneas CRT.",
+    "file": "desencriptador-hacker-matrix.mgt.json",
+    "preview": "media/matrix-v1.mp4",
+    "license": "CC0-1.0"
+  }
+]

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MGT Gallery — Moustache Graphics Tool</title>
+  <meta name="description" content="Galería abierta de composiciones JSON para Moustache Graphics Tool.">
+  <link rel="icon" href="media/mgt-icon.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="MGT Gallery">
+        <img src="media/mgt-icon.png" alt="">
+        <span><strong>MGT</strong><small>Moustache Graphics Tool</small></span>
+      </a>
+      <span class="topbar-label">OPEN MOTION COLLECTION</span>
+    </header>
+    <header class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">GALERÍA ABIERTA · MGT 0.31</p>
+        <h1>Motion graphics<br><em>que se mueven.</em></h1>
+        <p>Descubre composiciones creadas con MGT. Reproduce una muestra, copia su código o descarga el JSON para abrirlo en tu propia galería.</p>
+      </div>
+      <div class="hero-mark" aria-hidden="true"><span>✦</span><span>✦</span><span>✦</span></div>
+    </header>
+    <div class="section-heading"><span>01</span><h2>Composiciones</h2><i></i><small>JSON · MP4 · OPEN</small></div>
+    <section id="gallery" class="gallery" aria-live="polite"></section>
+    <p id="status" class="status" role="status"></p>
+  </main>
+  <template id="card-template">
+    <article class="card">
+      <div class="preview"></div>
+      <div class="card-body">
+        <div class="card-heading">
+          <h2></h2>
+          <span class="license"></span>
+        </div>
+        <p class="description"></p>
+        <div class="actions">
+          <button class="copy" type="button">Copiar código</button>
+          <a class="download" download>Descargar JSON</a>
+        </div>
+      </div>
+    </article>
+  </template>
+  <script src="app.js"></script>
+</body>
+</html>
