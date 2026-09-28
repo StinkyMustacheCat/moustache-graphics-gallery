@@ -11,7 +11,9 @@ Matrix.
 ## Añadir una composición
 
 1. Copia el JSON en `gallery/`.
-2. Añade una entrada en `gallery/manifest.json`.
+2. Añade una entrada en `gallery/manifest.json` con `tags` (uno o más identificadores:
+   `texto-titulos`, `fondos-efectos-visuales`, `escenas-ambientacion`,
+   `interfaces-datos` o `interactivos`).
 3. Opcionalmente copia el MP4 en `media/` y usa su ruta en `preview`.
 4. Publica el repositorio mediante GitHub Pages.
 

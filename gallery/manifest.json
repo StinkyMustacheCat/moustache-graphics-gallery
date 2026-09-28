@@ -5,7 +5,8 @@
     "description": "Efecto de texto estilo Matrix con lluvia digital, caracteres cambiantes y líneas CRT.",
     "file": "desencriptador-hacker-matrix.mgt.json",
     "preview": "media/matrix-v1.mp4",
-    "license": "CC0-1.0"
+    "license": "CC0-1.0",
+    "tags": ["texto-titulos", "fondos-efectos-visuales"]
   },
   {
     "id": "kinetic-title-dark-souls",
@@ -13,7 +14,8 @@
     "description": "Título cinético con zoom y fundido, inspirado en una presentación oscura y dramática.",
     "file": "kinetic-title-dark-souls.mgt.json",
     "preview": "media/dark-souls-text.mp4",
-    "license": "CC0-1.0"
+    "license": "CC0-1.0",
+    "tags": ["texto-titulos", "fondos-efectos-visuales"]
   },
   {
     "id": "dron-sobre-montanas",
@@ -21,7 +23,8 @@
     "description": "Composición atmosférica de paisaje con movimiento y sensación de vuelo sobre montañas.",
     "file": "dron-sobre-montanas.mgt.json",
     "preview": "media/dron-sobre-montanas.mp4",
-    "license": "CC0-1.0"
+    "license": "CC0-1.0",
+    "tags": ["escenas-ambientacion", "fondos-efectos-visuales"]
   },
   {
     "id": "esfera-red-plexus",
@@ -29,7 +32,8 @@
     "description": "Esfera de red luminosa con estética tecnológica y texto central.",
     "file": "esfera-red-plexus.mgt.json",
     "preview": "media/esfera-plexus-con-texto.mp4",
-    "license": "CC0-1.0"
+    "license": "CC0-1.0",
+    "tags": ["texto-titulos", "fondos-efectos-visuales"]
   },
   {
     "id": "contador-suscriptores-youtube",
@@ -37,7 +41,8 @@
     "description": "Contador animado para mostrar el crecimiento de suscriptores con estética de canal.",
     "file": "contador-suscriptores-youtube.mgt.json",
     "preview": "media/contador-suscriptores-youtube.mp4",
-    "license": "CC0-1.0"
+    "license": "CC0-1.0",
+    "tags": ["interfaces-datos"]
   },
   {
     "id": "texto-tres-lineas-impacto",
@@ -45,7 +50,8 @@
     "description": "Composición tipográfica de tres líneas con entrada de impacto y caída física.",
     "file": "texto-tres-lineas-impacto.mgt.json",
     "preview": "media/texto-tres-lineas-impacto.mp4",
-    "license": "CC0-1.0"
+    "license": "CC0-1.0",
+    "tags": ["texto-titulos", "fondos-efectos-visuales"]
   },
   {
     "id": "monitor-ecg-marcapasos",
@@ -53,7 +59,8 @@
     "description": "Monitor ECG configurable con pulso, trazado y estética de interfaz médica.",
     "file": "monitor-ecg-marcapasos.mgt.json",
     "preview": "media/monitor-ecg-marcapasos.mp4",
-    "license": "CC0-1.0"
+    "license": "CC0-1.0",
+    "tags": ["interfaces-datos", "fondos-efectos-visuales"]
   },
   {
     "id": "velocimetro-deportivo",
@@ -61,7 +68,8 @@
     "description": "Velocímetro deportivo configurable, estático o animado, para datos y presentaciones.",
     "file": "velocimetro-deportivo.mgt.json",
     "preview": "media/velocimetro-deportivo.mp4",
-    "license": "CC0-1.0"
+    "license": "CC0-1.0",
+    "tags": ["interfaces-datos"]
   },
   {
     "id": "pastillas-texto-apilables",
@@ -69,7 +77,8 @@
     "description": "Bloques de texto apilables para construir composiciones limpias y modulares.",
     "file": "pastillas-texto-apilables.mgt.json",
     "preview": "media/pastillas-texto-apilables.mp4",
-    "license": "CC0-1.0"
+    "license": "CC0-1.0",
+    "tags": ["texto-titulos"]
   },
   {
     "id": "barra-marquesina-noticiero-deportes",
@@ -77,7 +86,8 @@
     "description": "Marquesina deportiva para noticias, resultados y titulares en movimiento.",
     "file": "barra-marquesina-noticiero-deportes.mgt.json",
     "preview": "media/barra-marquesina-noticiero-deportes.mp4",
-    "license": "CC0-1.0"
+    "license": "CC0-1.0",
+    "tags": ["texto-titulos", "interfaces-datos"]
   },
   {
     "id": "simulador-tv-vhs-retro-crt",
@@ -85,7 +95,8 @@
     "description": "Simulación de pantalla de televisión VHS con interferencias, CRT y fondos configurables.",
     "file": "simulador-tv-vhs-retro-crt.mgt.json",
     "preview": "media/simulador-tv-vhs-retro-crt.mp4",
-    "license": "CC0-1.0"
+    "license": "CC0-1.0",
+    "tags": ["escenas-ambientacion", "fondos-efectos-visuales"]
   },
   {
     "id": "reloj-paletas-flip-clock",
@@ -93,7 +104,8 @@
     "description": "Contador regresivo con estética de reloj de paletas y transición flip clock.",
     "file": "reloj-paletas-flip-clock.mgt.json",
     "preview": "media/reloj-paletas-flip-clock.mp4",
-    "license": "CC0-1.0"
+    "license": "CC0-1.0",
+    "tags": ["interfaces-datos"]
   },
   {
     "id": "tablero-teorias-conspiracion",
@@ -101,7 +113,8 @@
     "description": "Tablero de investigación con pistas, conexiones y estética de detective.",
     "file": "tablero-teorias-conspiracion.mgt.json",
     "preview": "media/tablero-teorias-conspiracion.mp4",
-    "license": "CC0-1.0"
+    "license": "CC0-1.0",
+    "tags": ["escenas-ambientacion", "interfaces-datos"]
   },
   {
     "id": "los-sims-sons",
@@ -109,7 +122,8 @@
     "description": "Composición inspirada en una presentación de vida simulada con estilo de interfaz lúdica.",
     "file": "los-sims-sons.mgt.json",
     "preview": "media/los-sims-sons.mp4",
-    "license": "CC0-1.0"
+    "license": "CC0-1.0",
+    "tags": ["escenas-ambientacion", "interfaces-datos"]
   },
   {
     "id": "contador-notificaciones-social-media",
@@ -117,7 +131,8 @@
     "description": "Contador animado para notificaciones y métricas de redes sociales.",
     "file": "contador-notificaciones-social-media.mgt.json",
     "preview": "media/contador-notificaciones-social-media.mp4",
-    "license": "CC0-1.0"
+    "license": "CC0-1.0",
+    "tags": ["interfaces-datos"]
   },
   {
     "id": "ruleta-interactiva-premios",
@@ -125,7 +140,8 @@
     "description": "Ruleta configurable para sorteos, premios y dinámicas interactivas.",
     "file": "ruleta-interactiva-premios.mgt.json",
     "preview": "media/ruleta-interactiva-premios.mp4",
-    "license": "MIT"
+    "license": "CC0-1.0",
+    "tags": ["interactivos", "interfaces-datos"]
   },
   {
     "id": "pokimon",
@@ -133,7 +149,8 @@
     "description": "Composición temática con entrada de flash inicial y estética inspirada en criaturas.",
     "file": "pokimon.mgt.json",
     "preview": "media/pokimon.mp4",
-    "license": "MIT"
+    "license": "CC0-1.0",
+    "tags": ["interactivos", "interfaces-datos", "escenas-ambientacion"]
   },
   {
     "id": "epilepcia",
@@ -141,7 +158,8 @@
     "description": "Efecto de texto con cambios rápidos de color y parpadeos; se recomienda precaución al visualizarlo.",
     "file": "epilepcia.mgt.json",
     "preview": "media/epilepcia.mp4",
-    "license": "MIT",
+    "license": "CC0-1.0",
+    "tags": ["texto-titulos", "fondos-efectos-visuales"],
     "sensitiveWarning": "Esta composición contiene parpadeos y cambios rápidos de color que pueden provocar molestias o convulsiones en personas con epilepsia fotosensible. No continúes si tienes fotosensibilidad, migrañas sensibles a la luz o no estás seguro."
   },
   {
@@ -150,6 +168,7 @@
     "description": "Simulador orgánico de proyector e imperfecciones de celuloide con inicio de film leader, gate weave, jitter, flicker, halation y partículas de polvo/rayas.",
     "file": "film-gate-50s-film.mgt.json",
     "preview": "media/film-gate-50s-film.mp4",
-    "license": "CC0-1.0"
+    "license": "CC0-1.0",
+    "tags": ["texto-titulos", "fondos-efectos-visuales", "escenas-ambientacion"]
   }
 ]

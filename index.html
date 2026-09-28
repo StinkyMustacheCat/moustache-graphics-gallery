@@ -37,6 +37,15 @@
         <output id="card-size-value" for="card-size">340 px</output>
       </label>
     </section>
+    <nav class="tag-filters" aria-label="Filtrar composiciones por categoría">
+      <button class="tag-filter active" type="button" data-tag="all" aria-pressed="true">Todos</button>
+      <button class="tag-filter" type="button" data-tag="texto-titulos" aria-pressed="false">Texto y títulos</button>
+      <button class="tag-filter" type="button" data-tag="fondos-efectos-visuales" aria-pressed="false">Fondos y efectos visuales</button>
+      <button class="tag-filter" type="button" data-tag="escenas-ambientacion" aria-pressed="false">Escenas y ambientación</button>
+      <button class="tag-filter" type="button" data-tag="interfaces-datos" aria-pressed="false">Interfaces y datos</button>
+      <button class="tag-filter" type="button" data-tag="interactivos" aria-pressed="false">Interactivos</button>
+    </nav>
+    <p id="filter-status" class="filter-status" role="status" aria-live="polite"></p>
     <section id="gallery" class="gallery" aria-live="polite"></section>
     <p id="status" class="status" role="status"></p>
   </main>

@@ -2,8 +2,12 @@ const gallery = document.querySelector('#gallery');
 const status = document.querySelector('#status');
 const template = document.querySelector('#card-template');
 const viewButtons = document.querySelectorAll('.view-button');
+const tagFilters = document.querySelectorAll('.tag-filter');
+const filterStatus = document.querySelector('#filter-status');
 const sizeInput = document.querySelector('#card-size');
 const sizeOutput = document.querySelector('#card-size-value');
+let entries = [];
+let activeTag = 'all';
 
 function setStatus(message) {
   status.textContent = message;
@@ -20,6 +24,31 @@ function setView(view) {
 
 viewButtons.forEach((button) => {
   button.addEventListener('click', () => setView(button.dataset.view));
+});
+
+function setTag(tag) {
+  activeTag = tag;
+  tagFilters.forEach((button) => {
+    const active = button.dataset.tag === tag;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-pressed', String(active));
+  });
+
+  let visibleCount = 0;
+  gallery.querySelectorAll('.card').forEach((card) => {
+    const visible = tag === 'all' || card.dataset.tags.split(' ').includes(tag);
+    card.hidden = !visible;
+    if (visible) visibleCount += 1;
+  });
+  filterStatus.textContent = visibleCount === entries.length
+    ? `Mostrando las ${visibleCount} composiciones.`
+    : visibleCount === 0
+      ? 'No hay composiciones en esta categoría.'
+      : `Mostrando ${visibleCount} de ${entries.length} composiciones.`;
+}
+
+tagFilters.forEach((button) => {
+  button.addEventListener('click', () => setTag(button.dataset.tag));
 });
 
 sizeInput.addEventListener('input', () => {
@@ -78,6 +107,8 @@ function createSensitiveGate(entry, preview, activate) {
 
 async function renderEntry(entry) {
   const card = template.content.cloneNode(true);
+  const article = card.querySelector('.card');
+  article.dataset.tags = entry.tags.join(' ');
   card.querySelector('h2').textContent = entry.title;
   card.querySelector('.description').textContent = entry.description || '';
   card.querySelector('.license').textContent = entry.license || '';
@@ -122,12 +153,13 @@ async function main() {
   try {
     const response = await fetch('gallery/manifest.json');
     if (!response.ok) throw new Error('No se pudo cargar gallery/manifest.json');
-    const entries = await response.json();
+    entries = await response.json();
     if (!Array.isArray(entries) || entries.length === 0) {
       setStatus('Todavía no hay composiciones publicadas.');
       return;
     }
     for (const entry of entries) await renderEntry(entry);
+    setTag(activeTag);
   } catch (error) {
     setStatus(`No se pudo cargar la galería: ${error.message}`);
   }
