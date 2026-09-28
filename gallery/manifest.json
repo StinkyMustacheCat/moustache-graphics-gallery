@@ -143,5 +143,13 @@
     "preview": "media/epilepcia.mp4",
     "license": "MIT",
     "sensitiveWarning": "Esta composición contiene parpadeos y cambios rápidos de color que pueden provocar molestias o convulsiones en personas con epilepsia fotosensible. No continúes si tienes fotosensibilidad, migrañas sensibles a la luz o no estás seguro."
+  },
+  {
+    "id": "film-gate-50s-film",
+    "title": "Film Gate 50s Film",
+    "description": "Simulador orgánico de proyector e imperfecciones de celuloide con inicio de film leader, gate weave, jitter, flicker, halation y partículas de polvo/rayas.",
+    "file": "film-gate-50s-film.mgt.json",
+    "preview": "media/film-gate-50s-film.mp4",
+    "license": "MIT"
   }
 ]

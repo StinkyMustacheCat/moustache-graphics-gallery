@@ -1,0 +1,234 @@
+{
+  "version": 3,
+  "name": "Film Gate 50's film",
+  "seed": 42,
+  "recommended": {
+    "duration": 6,
+    "aspect": "horizontal",
+    "resolution": 1080
+  },
+  "metadata": {
+    "id": "film-gate-engine",
+    "description": "Simulador orgánico de proyector e imperfecciones de celuloide con inicio de film leader, gate weave, jitter, flicker, halation y partículas de polvo/rayas.",
+    "category": "Retro / Film Effects",
+    "author": "MGT Team",
+    "license": "MIT",
+    "templateVersion": "1.0.0",
+    "tags": [
+      "film",
+      "retro",
+      "vintage",
+      "proyector",
+      "leader",
+      "text",
+      "cinema",
+      "grain"
+    ]
+  },
+  "parameters": [
+    {
+      "id": "text_content",
+      "label": "Texto Principal",
+      "type": "text",
+      "randomize": false,
+      "default": "ayuda"
+    },
+    {
+      "id": "subtitle_content",
+      "label": "Subtítulo",
+      "type": "text",
+      "randomize": false,
+      "default": "DIRECTED BY Gato con bigote"
+    },
+    {
+      "id": "font_family",
+      "label": "Fuente",
+      "type": "font",
+      "randomize": false,
+      "default": "Georgia"
+    },
+    {
+      "id": "text_size",
+      "label": "Tamaño Texto",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": 20,
+      "max": 300,
+      "step": 1,
+      "default": 110
+    },
+    {
+      "id": "pos_x",
+      "label": "Posición X (%)",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": -50,
+      "max": 150,
+      "step": 0.5,
+      "default": 50
+    },
+    {
+      "id": "pos_y",
+      "label": "Posición Y (%)",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": -50,
+      "max": 150,
+      "step": 0.5,
+      "default": 50
+    },
+    {
+      "id": "text_color",
+      "label": "Color Texto",
+      "type": "color",
+      "randomize": false,
+      "default": "#F2E8CF"
+    },
+    {
+      "id": "bg_color",
+      "label": "Color Fondo",
+      "type": "color",
+      "randomize": false,
+      "default": "#12100E"
+    },
+    {
+      "id": "instability",
+      "label": "Inestabilidad General",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 45
+    },
+    {
+      "id": "gate_weave",
+      "label": "Gate Weave (Temblor)",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 60
+    },
+    {
+      "id": "flicker_amount",
+      "label": "Flicker (Parpadeo)",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 50
+    },
+    {
+      "id": "focus_breathing",
+      "label": "Focus Breathing",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 35
+    },
+    {
+      "id": "dust_scratch",
+      "label": "Polvo y Rayones",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 55
+    },
+    {
+      "id": "halation_intensity",
+      "label": "Halation (Resplandor)",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 40
+    },
+    {
+      "id": "chromatic_aberration",
+      "label": "Aberración Cromática",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 30
+    },
+    {
+      "id": "vignette_breath",
+      "label": "Viñeta Viva",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 65
+    },
+    {
+      "id": "leader_duration",
+      "label": "Intro Film Leader (s)",
+      "type": "number",
+      "control": "slider",
+      "randomize": false,
+      "min": 0,
+      "max": 2.5,
+      "step": 0.1,
+      "default": 0.8
+    },
+    {
+      "id": "step_framerate",
+      "label": "Imperfect Timing",
+      "type": "select",
+      "randomize": false,
+      "options": [
+        "60 FPS",
+        "24 FPS",
+        "18 FPS",
+        "12 FPS"
+      ],
+      "default": "18 FPS"
+    },
+    {
+      "id": "show_leader_marks",
+      "label": "Mostrar Marcas Leader",
+      "type": "boolean",
+      "randomize": false,
+      "default": true
+    }
+  ],
+  "stops": [
+    {
+      "id": "stop_title",
+      "label": "Posición Título",
+      "element": "#mgt-title-wrapper",
+      "x": "pos_x",
+      "y": "pos_y",
+      "at": 0.3
+    }
+  ],
+  "resources": {},
+  "html": "<div id=\"mgt-film-container\"><div id=\"mgt-vignette\"></div><canvas id=\"mgt-film-canvas\"></canvas><div id=\"mgt-title-wrapper\"><div id=\"mgt-title\"></div><div id=\"mgt-subtitle\"></div></div><div id=\"mgt-leader-layer\"><div id=\"mgt-leader-circle\"></div><div id=\"mgt-leader-text\"></div></div></div>",
+  "css": "#mgt-film-container { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: sans-serif; box-sizing: border-box; display: flex; align-items: center; justify-content: center; } #mgt-film-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; } #mgt-vignette { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; mix-blend-mode: multiply; } #mgt-title-wrapper { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 1; pointer-events: auto; white-space: nowrap; user-select: none; } #mgt-title { font-weight: bold; letter-spacing: 0.05em; text-transform: uppercase; line-height: 1.1; } #mgt-subtitle { font-weight: normal; letter-spacing: 0.2em; text-transform: uppercase; margin-top: 15px; opacity: 0.85; } #mgt-leader-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 4; display: flex; align-items: center; justify-content: center; flex-direction: column; } #mgt-leader-circle { border: 4px solid currentColor; border-radius: 50%; width: 280px; height: 280px; position: absolute; box-sizing: border-box; display: none; } #mgt-leader-text { font-family: monospace; font-size: 110px; font-weight: bold; z-index: 5; display: none; }",
+  "render": "const p = ctx.params;\nconst w = ctx.width;\nconst h = ctx.height;\nconst root = ctx.root;\n\nlet effectiveFps = 60;\nif (p.step_framerate === '24 FPS') effectiveFps = 24;\nelse if (p.step_framerate === '18 FPS') effectiveFps = 18;\nelse if (p.step_framerate === '12 FPS') effectiveFps = 12;\n\nconst totalFrames = Math.round(ctx.duration * 60);\nconst currentFrame = ctx.frame;\nconst effectiveFrameIndex = Math.floor(ctx.time * effectiveFps);\nconst discreteTime = effectiveFrameIndex / effectiveFps;\n\nconst container = root.querySelector('#mgt-film-container');\nconst titleWrapper = root.querySelector('#mgt-title-wrapper');\nconst titleEl = root.querySelector('#mgt-title');\nconst subtitleEl = root.querySelector('#mgt-subtitle');\nconst vignetteEl = root.querySelector('#mgt-vignette');\nconst leaderLayer = root.querySelector('#mgt-leader-layer');\nconst leaderCircle = root.querySelector('#mgt-leader-circle');\nconst leaderText = root.querySelector('#mgt-leader-text');\nconst canvas = root.querySelector('#mgt-film-canvas');\ncanvas.width = w;\ncanvas.height = h;\nconst g = canvas.getContext('2d');\n\nroot.style.backgroundColor = p.bg_color;\n\nconst inst = p.instability / 100;\n\nfunction noise(idx) {\n  return ctx.random(Math.abs((effectiveFrameIndex * 17 + idx * 1013) % 99991));\n}\n\nconst weaveMult = (p.gate_weave / 100) * (0.5 + inst * 1.5);\nconst dx = (noise(1) - 0.5) * 8 * weaveMult;\nconst dy = (noise(2) - 0.5) * 8 * weaveMult;\nconst rot = (noise(3) - 0.5) * 0.8 * weaveMult;\n\nlet jitterY = 0;\nif (noise(4) > (0.93 - inst * 0.15)) {\n  jitterY = (noise(5) - 0.5) * 24 * weaveMult;\n}\n\nconst flickerMult = (p.flicker_amount / 100) * (0.4 + inst * 1.1);\nconst flickerOpacity = 1 - (noise(6) * 0.25 * flickerMult);\nconst colorBrightness = 1 + (noise(7) - 0.5) * 0.3 * flickerMult;\n\nconst focusMult = (p.focus_breathing / 100) * (0.5 + inst * 1.5);\nlet blurPx = 0;\nif (noise(8) > 0.6) {\n  blurPx = noise(9) * 2.2 * focusMult;\n}\n\nconst chroma = (p.chromatic_aberration / 100) * (1 + inst * 2);\nconst halation = p.halation_intensity / 100;\n\ntitleEl.textContent = p.text_content;\nsubtitleEl.textContent = p.subtitle_content;\ntitleEl.style.fontFamily = p.font_family;\ntitleEl.style.fontSize = p.text_size + 'px';\nsubtitleEl.style.fontFamily = p.font_family;\nsubtitleEl.style.fontSize = Math.max(14, Math.round(p.text_size * 0.28)) + 'px';\ntitleEl.style.color = p.text_color;\nsubtitleEl.style.color = p.text_color;\n\ntitleWrapper.style.left = p.pos_x + '%';\ntitleWrapper.style.top = p.pos_y + '%';\n\nlet textTransform = `translate(-50%, -50%) translate(${dx}px, ${dy + jitterY}px) rotate(${rot}deg)`;\nlet textFilter = `blur(${blurPx}px) brightness(${colorBrightness})`;\n\nif (halation > 0) {\n  const hGlow = Math.round(12 * halation);\n  textFilter += ` drop-shadow(0px 0px ${hGlow}px ${p.text_color})`;\n}\n\nif (chroma > 0.1) {\n  const cOff = (1.5 * chroma).toFixed(1);\n  titleEl.style.textShadow = `${cOff}px 0 rgba(255,0,0,0.7), -${cOff}px 0 rgba(0,255,255,0.7)`;\n} else {\n  titleEl.style.textShadow = 'none';\n}\n\ntitleWrapper.style.transform = textTransform;\ntitleWrapper.style.filter = textFilter;\ntitleWrapper.style.opacity = flickerOpacity;\n\nconst leaderDur = p.leader_duration;\nconst inLeader = ctx.time < leaderDur;\n\nif (inLeader) {\n  const leaderProgress = ctx.time / Math.max(0.001, leaderDur);\n  const countNum = Math.ceil((1 - leaderProgress) * 8);\n  \n  if (p.show_leader_marks) {\n    leaderLayer.style.display = 'flex';\n    leaderLayer.style.color = p.text_color;\n    leaderCircle.style.display = 'block';\n    leaderText.style.display = 'block';\n    leaderText.textContent = countNum > 0 ? countNum : 'START';\n    leaderCircle.style.transform = `scale(${1 + (noise(10) - 0.5) * 0.1})`;\n  } else {\n    leaderLayer.style.display = 'none';\n  }\n  \n  if (noise(11) > 0.3) {\n    titleWrapper.style.opacity = (noise(12) * 0.5).toString();\n    titleWrapper.style.transform = `${textTransform} scaleY(${0.2 + noise(13) * 1.5}) skewX(${(noise(14)-0.5)*40}deg)`;\n  }\n} else {\n  leaderLayer.style.display = 'none';\n  if (ctx.editingStop === 'stop_title') {\n    titleWrapper.style.opacity = '1';\n  }\n}\n\nconst vigBreath = (p.vignette_breath / 100) * (0.8 + inst * 0.6);\nconst vigSize = 60 + (noise(15) - 0.5) * 12 * vigBreath;\nconst vigOpacity = 0.75 + (noise(16) - 0.5) * 0.2 * vigBreath;\nvignetteEl.style.background = `radial-gradient(circle, transparent ${vigSize}%, rgba(0,0,0,${vigOpacity}) 100%)`;\n\ng.clearRect(0, 0, w, h);\n\nconst grainAmount = Math.floor(1800 * (0.5 + inst));\ng.fillStyle = 'rgba(255, 255, 255, 0.08)';\nfor (let i = 0; i < grainAmount; i++) {\n  const gx = noise(i + 20) * w;\n  const gy = noise(i + 5000) * h;\n  const gsz = noise(i + 10000) > 0.8 ? 2 : 1;\n  g.fillRect(gx, gy, gsz, gsz);\n}\n\nconst dustMult = p.dust_scratch / 100;\nif (dustMult > 0) {\n  const numSpecks = Math.floor((3 + inst * 12) * dustMult);\n  g.fillStyle = noise(101) > 0.3 ? 'rgba(10, 10, 10, 0.75)' : 'rgba(240, 230, 210, 0.7)';\n  \n  for (let i = 0; i < numSpecks; i++) {\n    const px = noise(i + 200) * w;\n    const py = noise(i + 300) * h;\n    const pr = 1.5 + noise(i + 400) * 3.5 * (1 + inst);\n    \n    g.beginPath();\n    g.arc(px, py, pr, 0, Math.PI * 2);\n    g.fill();\n    \n    if (noise(i + 500) > (0.75 - inst * 0.25)) {\n      g.strokeStyle = g.fillStyle;\n      g.lineWidth = 1 + noise(i + 600);\n      g.beginPath();\n      g.moveTo(px, py);\n      g.quadraticCurveTo(\n        px + (noise(i + 700) - 0.5) * 40,\n        py + (noise(i + 800) - 0.5) * 40,\n        px + (noise(i + 900) - 0.5) * 70,\n        py + (noise(i + 1000) - 0.5) * 70\n      );\n      g.stroke();\n    }\n  }\n\n  if (noise(88) < (0.35 + inst * 0.4)) {\n    const rx = noise(89) * w;\n    const rAlpha = 0.12 + noise(90) * 0.25 * dustMult;\n    g.strokeStyle = noise(91) > 0.4 ? `rgba(255, 255, 255, ${rAlpha})` : `rgba(0, 0, 0, ${rAlpha})`;\n    g.lineWidth = 1 + noise(92) * 1.5;\n    g.beginPath();\n    g.moveTo(rx + (noise(93) - 0.5) * 5, 0);\n    g.lineTo(rx + (noise(94) - 0.5) * 5, h);\n    g.stroke();\n  }\n}",
+  "editorSettings": {
+    "background": "#172326"
+  }
+}
