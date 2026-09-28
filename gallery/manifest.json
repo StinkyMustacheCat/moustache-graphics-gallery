@@ -150,6 +150,6 @@
     "description": "Simulador orgánico de proyector e imperfecciones de celuloide con inicio de film leader, gate weave, jitter, flicker, halation y partículas de polvo/rayas.",
     "file": "film-gate-50s-film.mgt.json",
     "preview": "media/film-gate-50s-film.mp4",
-    "license": "MIT"
+    "license": "CC0-1.0"
   }
 ]
