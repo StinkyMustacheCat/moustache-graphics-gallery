@@ -170,5 +170,14 @@
     "preview": "media/film-gate-50s-film.mp4",
     "license": "CC0-1.0",
     "tags": ["texto-titulos", "fondos-efectos-visuales", "escenas-ambientacion"]
+  },
+  {
+    "id": "la-triada",
+    "title": "La triada",
+    "description": "Composición animada de tres imágenes superpuestas con profundidad 3D, tarjeta central inclinada y desenfoque de movimiento.",
+    "file": "la-triada.mgt.json",
+    "preview": "media/la-triada.mp4",
+    "license": "CC0-1.0",
+    "tags": ["escenas-ambientacion", "fondos-efectos-visuales"]
   }
 ]
