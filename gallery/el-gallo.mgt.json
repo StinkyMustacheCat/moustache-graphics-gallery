@@ -1,0 +1,122 @@
+{
+  "version": 2,
+  "name": "El Gallo",
+  "seed": 1,
+  "recommended": {
+    "duration": 60,
+    "aspect": "vertical",
+    "resolution": 1080
+  },
+  "stops": [
+    {
+      "id": "start",
+      "label": "Inicio",
+      "element": "#title",
+      "x": "startX",
+      "y": "startY",
+      "at": 0
+    },
+    {
+      "id": "end",
+      "label": "Final",
+      "element": "#title",
+      "x": "endX",
+      "y": "endY",
+      "at": 1
+    }
+  ],
+  "parameters": [
+    {
+      "id": "text",
+      "label": "Texto",
+      "type": "text",
+      "default": "Haz que tus\nideas se muevan."
+    },
+    {
+      "id": "color",
+      "label": "Color",
+      "type": "color",
+      "default": "#f4f4f5",
+      "randomize": true
+    },
+    {
+      "id": "font",
+      "label": "Fuente instalada",
+      "type": "font",
+      "default": "Arial"
+    },
+    {
+      "id": "size",
+      "label": "Tamaño",
+      "type": "number",
+      "default": 100,
+      "min": 12,
+      "max": 400,
+      "step": 1,
+      "control": "slider"
+    },
+    {
+      "id": "startX",
+      "label": "Inicio horizontal (%)",
+      "type": "number",
+      "default": 30,
+      "min": -100,
+      "max": 200,
+      "step": 0.1
+    },
+    {
+      "id": "startY",
+      "label": "Inicio vertical (%)",
+      "type": "number",
+      "default": 50,
+      "min": -100,
+      "max": 200,
+      "step": 0.1
+    },
+    {
+      "id": "endX",
+      "label": "Final horizontal (%)",
+      "type": "number",
+      "default": 70,
+      "min": -100,
+      "max": 200,
+      "step": 0.1
+    },
+    {
+      "id": "endY",
+      "label": "Final vertical (%)",
+      "type": "number",
+      "default": 50,
+      "min": -100,
+      "max": 200,
+      "step": 0.1
+    },
+    {
+      "id": "easing",
+      "label": "Movimiento",
+      "type": "select",
+      "default": "linear",
+      "options": [
+        "linear",
+        "smooth"
+      ]
+    },
+    {
+      "id": "visible",
+      "label": "Mostrar texto",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "html": "<div id=\"title\"></div>",
+  "css": "#title { position:absolute; transform:translate(-50%,-50%); white-space:pre; text-align:center; line-height:1.15; font-weight:400; }",
+  "render": "const { root, params: p, progress, width, height } = ctx;\nconst title = root.querySelector('#title');\nconst t = p.easing === 'smooth' ? progress * progress * (3 - 2 * progress) : progress;\ntitle.textContent = p.text;\nObject.assign(title.style, { display: p.visible ? 'block' : 'none', fontFamily: JSON.stringify(p.font), fontSize: p.size + 'px', color: p.color, left: (p.startX + (p.endX - p.startX) * t) * width / 100 + 'px', top: (p.startY + (p.endY - p.startY) * t) * height / 100 + 'px' });",
+  "metadata": {
+    "id": "el-gallo",
+    "description": "Animación tipográfica configurable para presentar frases y títulos personalizados. La muestra de referencia es solo para uso privado; se publica aquí con autorización expresa del titular. Cualquier otra publicación o redistribución pública requiere permiso del titular. No se transfieren derechos del personaje ni del material original.",
+    "license": "Todos los derechos reservados; permiso del titular requerido para redistribución pública"
+  },
+  "editorSettings": {
+    "background": "#172326"
+  }
+}

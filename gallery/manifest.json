@@ -179,5 +179,14 @@
     "preview": "media/la-triada.mp4",
     "license": "CC0-1.0",
     "tags": ["escenas-ambientacion", "fondos-efectos-visuales"]
+  },
+  {
+    "id": "el-gallo",
+    "title": "El Gallo",
+    "description": "Animación tipográfica configurable para presentar frases y títulos personalizados: permite cambiar texto, color, fuente, tamaño, posiciones inicial y final, y movimiento. La muestra de referencia es solo para uso privado; se publica aquí con autorización expresa del titular. Cualquier otra publicación o redistribución pública requiere permiso del titular. No se transfieren derechos del personaje ni del material original.",
+    "file": "el-gallo.mgt.json",
+    "preview": "media/el-gallo.mp4",
+    "license": "Todos los derechos reservados; permiso del titular requerido para redistribución pública",
+    "tags": ["texto-titulos"]
   }
 ]
