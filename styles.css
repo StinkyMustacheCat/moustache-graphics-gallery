@@ -70,7 +70,8 @@ h1 em { color: var(--accent); font-style: normal; text-shadow: 0 0 35px #a64dff8
 .tag-filter.active { background: var(--accent); border-color: var(--accent); color: #170c27; }
 .tag-filter:focus-visible, .view-button:focus-visible, button:focus-visible, .download:focus-visible, input:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; }
 .filter-status { min-height: 1.5em; margin: 0 0 14px; color: var(--muted); font-size: .78rem; }
-.gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(var(--card-min, 340px), 1fr)); gap: 24px; }
+.gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--card-min, 340px)), 1fr)); grid-auto-rows: minmax(230px, auto); gap: 24px; }
+.gallery:not(.list-view) .card--tall { grid-row: span 2; }
 .gallery .card[hidden] { display: none; }
 .gallery.list-view { display: flex; flex-direction: column; }
 .gallery.list-view .card { display: grid; grid-template-columns: minmax(280px, 42%) 1fr; }
@@ -80,7 +81,7 @@ h1 em { color: var(--accent); font-style: normal; text-shadow: 0 0 35px #a64dff8
 .card:hover { transform: translateY(-5px); border-color: #c47cff88; box-shadow: 0 26px 75px #000a, 0 0 40px #9b4de822; }
 .preview { position: relative; aspect-ratio: 16 / 9; display: grid; place-items: center; background: #030306; }
 .preview::after { content: "MGT / PREVIEW"; position: absolute; top: 12px; left: 14px; color: #fff9; font-size: .58rem; letter-spacing: .16em; pointer-events: none; }
-.preview video { width: 100%; height: 100%; object-fit: cover; }
+.preview video { width: 100%; height: 100%; object-fit: contain; }
 .no-preview { padding: 24px; color: var(--muted); text-align: center; }
 .sensitive-preview { padding: 24px; background: radial-gradient(circle, #3b1726, #09070d 72%); }
 .sensitive-warning { max-width: 420px; color: #ffe9ef; text-align: center; }
@@ -89,9 +90,14 @@ h1 em { color: var(--accent); font-style: normal; text-shadow: 0 0 35px #a64dff8
 button:disabled, .download[aria-disabled="true"] { cursor: not-allowed; opacity: .45; }
 .sensitive-continue { background: #ff9fba; color: #260d17; }
 .card-body { padding: 24px; }
-.card-heading { display: flex; align-items: start; justify-content: space-between; gap: 12px; }
+.card-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 h2 { margin: 0; font-size: 1.3rem; }
-.license { flex: none; color: var(--green); font-size: .68rem; letter-spacing: .08em; }
+.license-info { display: inline-grid; flex: none; place-items: center; width: 30px; height: 30px; padding: 0; border: 1px solid var(--green); border-radius: 50%; background: transparent; color: var(--green); font-family: Georgia, serif; font-size: 1rem; font-style: italic; font-weight: 700; box-shadow: none; }
+.license-info:hover, .license-info[aria-expanded="true"] { background: var(--green); color: #102219; transform: none; }
+.license-details { margin-top: 14px; padding: 13px 15px; border: 1px solid var(--border); border-radius: 10px; background: #0e0b16; color: var(--muted); font-size: .8rem; overflow-wrap: anywhere; }
+.license-details strong { color: var(--green); }
+.license-details p { margin: 7px 0 0; }
+.license-details p:last-child { margin-bottom: 0; }
 .description { min-height: 48px; }
 .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
 button, .download { border: 0; border-radius: 9px; padding: 10px 14px; font: inherit; font-size: .87rem; font-weight: 750; cursor: pointer; transition: .2s ease; }
@@ -115,6 +121,8 @@ button:hover { background: #d09dff; transform: translateY(-1px); }
   .hero-mark span:nth-child(1) { top: 5px; left: 49px; }.hero-mark span:nth-child(2) { bottom: 10px; left: 17px; }.hero-mark span:nth-child(3) { top: 45px; right: 3px; }
   .hero-copy { z-index: 1; }
   .gallery-tools { align-items: stretch; flex-direction: column; }
+  .gallery:not(.list-view) { grid-template-columns: minmax(0, 1fr); }
+  .gallery:not(.list-view) .card--tall { grid-row: auto; }
   .size-control input { flex: 1; width: auto; }
   .gallery.list-view .card { display: block; }
   .actions > * { flex: 1 1 100%; text-align: center; }

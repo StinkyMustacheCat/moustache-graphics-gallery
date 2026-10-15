@@ -64,7 +64,7 @@ async function loadComposition(entry) {
   return response.json();
 }
 
-function createPreview(entry, preview) {
+function createPreview(entry, preview, article) {
   if (!entry.preview) {
     preview.innerHTML = '<span class="no-preview">MP4 de demostración pendiente</span>';
     return;
@@ -80,6 +80,12 @@ function createPreview(entry, preview) {
   source.src = new URL(entry.preview, window.location.href).href;
   source.type = 'video/mp4';
   video.append(source);
+  video.addEventListener('loadedmetadata', () => {
+    const { videoWidth, videoHeight } = video;
+    if (!videoWidth || !videoHeight) return;
+    preview.style.aspectRatio = `${videoWidth} / ${videoHeight}`;
+    if (videoWidth < videoHeight) article.classList.add('card--tall');
+  }, { once: true });
   video.addEventListener('error', () => {
     preview.innerHTML = '<span class="no-preview">Este navegador no puede reproducir el MP4. Usa Descargar o abre el vídeo directamente.</span>';
   }, { once: true });
@@ -111,7 +117,23 @@ async function renderEntry(entry) {
   article.dataset.tags = entry.tags.join(' ');
   card.querySelector('h2').textContent = entry.title;
   card.querySelector('.description').textContent = entry.description || '';
-  card.querySelector('.license').textContent = entry.license || '';
+  const licenseInfo = card.querySelector('.license-info');
+  const licenseDetails = card.querySelector('.license-details');
+  const licenseText = card.querySelector('.license');
+  const licenseNotes = card.querySelector('.license-notes');
+  const detailsId = `license-details-${entry.id}`;
+  licenseInfo.setAttribute('aria-label', `Mostrar licencia y condiciones de ${entry.title}`);
+  licenseInfo.setAttribute('aria-controls', detailsId);
+  licenseDetails.id = detailsId;
+  licenseText.textContent = entry.license || 'Licencia no especificada.';
+  licenseNotes.textContent = entry.licenseNotes || '';
+  licenseNotes.hidden = !entry.licenseNotes;
+  licenseInfo.addEventListener('click', () => {
+    const expanded = licenseInfo.getAttribute('aria-expanded') === 'true';
+    licenseInfo.setAttribute('aria-expanded', String(!expanded));
+    licenseInfo.setAttribute('aria-label', `${expanded ? 'Mostrar' : 'Ocultar'} licencia y condiciones de ${entry.title}`);
+    licenseDetails.hidden = expanded;
+  });
   const preview = card.querySelector('.preview');
 
   const composition = await loadComposition(entry);
@@ -121,7 +143,7 @@ async function renderEntry(entry) {
   const activate = () => {
     copyButton.disabled = false;
     download.removeAttribute('aria-disabled');
-    createPreview(entry, preview);
+    createPreview(entry, preview, article);
   };
   copyButton.disabled = Boolean(entry.sensitiveWarning);
   if (entry.sensitiveWarning) download.setAttribute('aria-disabled', 'true');

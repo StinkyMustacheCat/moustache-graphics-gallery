@@ -183,10 +183,11 @@
   {
     "id": "el-gallo",
     "title": "El Gallo",
-    "description": "Animación tipográfica configurable para presentar frases y títulos personalizados: permite cambiar texto, color, fuente, tamaño, posiciones inicial y final, y movimiento. La muestra de referencia es solo para uso privado; se publica aquí con autorización expresa del titular. Cualquier otra publicación o redistribución pública requiere permiso del titular. No se transfieren derechos del personaje ni del material original.",
+    "description": "Escena vertical de retrato personalizable: elige una imagen de fondo y un personaje, ajusta su posición y escala, y añade formas orgánicas animadas con colores, contornos y movimiento configurables. Incluye una placa para editar el nombre.",
     "file": "el-gallo.mgt.json",
     "preview": "media/el-gallo.mp4",
     "license": "Todos los derechos reservados; permiso del titular requerido para redistribución pública",
+    "licenseNotes": "La muestra de referencia se publica con autorización expresa del titular. Cualquier otra publicación o redistribución pública requiere permiso explícito del autor o titular de derechos. No se transfieren derechos sobre el personaje ni sobre materiales de terceros.",
     "tags": ["texto-titulos"]
   }
 ]
